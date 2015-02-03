@@ -24,26 +24,10 @@
 
   Polymer('study-result-page', {
     // initialize the element's model
-//    tests : [
-//        {year:2,semester:1},
-//        {year:1,semester:1},
-//        {year:3,semester:1},
-//        {year:1,semester:3},
-//        {year:1,semester:2},
-//    ],
     ready: function () {
       console.log("study-result-page ready " + n);
       this.initialData();
-//      this.subjects = [];
       this.subjectInSemesters = [];
-
-//      this.tests.sort(function(a, b){
-//        if (a.year == b.year){
-//          return a.semester-b.semester;
-//        }else {
-//          return a.year-b.year;
-//        }
-//      });
     },
     toggleDialog: function () {
       this.$.addSubjectItem.toggle();
