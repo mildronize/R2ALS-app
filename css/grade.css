@@ -1,0 +1,25 @@
+.grade{
+  padding: 0px 0px;
+  margin: 0px;
+  width:28px;
+  height:28px;
+  font-size:14px;
+  font-weight: bold;
+  color:#fff;
+  line-height:28px;
+  text-align:center;
+  background:#424242;
+  display: inline-block;
+}
+
+.grade-circle{
+  border-radius:50%;
+}
+
+.grade-space{
+  margin: 5px 20px 5px 10px;
+}
+.grade-invert{
+  color: #424242;
+  background:none;
+}

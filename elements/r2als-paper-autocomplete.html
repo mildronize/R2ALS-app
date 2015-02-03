@@ -1,0 +1,28 @@
+<link rel="import" href="/components/paper-item/paper-item.html">
+<link rel="import" href="/components/paper-shadow/paper-shadow.html">
+
+<link rel="import" href="/components/chisele/chisele.html" >
+
+<polymer-element name="r2als-paper-autocomplete" extends="chi-sele" attributes="label sValue" noscript>
+  
+<template>
+<!--   Document -- http://btripoloni.github.io/chisele/-->
+  <paper-input-decorator label="{{label}}" floatingLabel>
+    <input id="form" value="{{ sValue }}" on-keyup="{{ keypress }}" placeholder="{{ placeholder }}" class="{{ class }}" on-blur="{{ blur }}" />
+  </paper-input-decorator>
+
+  <template if="{{ open }}">
+    <paper-shadow>
+      <div id="chiseleResults" style="">
+        <template repeat="{{suggestions}}">
+          <p on-tap="{{ toInput }}">
+            {{name}}
+          </p>
+        </template>
+
+      </div>
+    </paper-shadow>
+  </template>
+</template>
+  
+</polymer-element>

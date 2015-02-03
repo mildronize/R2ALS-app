@@ -1,0 +1,58 @@
+<!--<link rel="import" href="/components/polymer/polymer.html">-->
+<link rel="import" href="/layouts/main-layout.html">
+<link href="/components/paper-input/paper-autogrow-textarea.html" rel="import">
+<link href="/components/paper-input/paper-input-decorator.html" rel="import">
+<link href="/components/paper-input/paper-input.html" rel="import">
+<link href="/components/paper-button/paper-button.html" rel="import">
+<link href="/components/paper-radio-group/paper-radio-group.html" rel="import">
+
+<link href="/elements/r2als-anchor-button.html" rel="import">
+
+<polymer-element name="profile-page" noscript>
+  <template>
+    <style>
+      /*
+        Profile page
+      */
+      paper-radio-button {
+        display: block;
+      }
+    </style>
+    <link rel="stylesheet" href="/css/main.css" shim-shadowdom>
+    <main-layout selected="profile">
+      
+      <div class="title">Profile</div>
+
+      <h3>Step 2: Fill your profile</h3>
+      <section>
+        <h4>Your student group</h4>
+
+        <paper-radio-group selected="subject-group">
+          <paper-radio-button name="first-group" label="First group (A - I)"></paper-radio-button>
+          <paper-radio-button name="second-group" label="Second group (J - R)"></paper-radio-button>
+        </paper-radio-group>
+
+      </section>
+      <section>
+        <h4>Your professional skill</h4>
+
+        <paper-radio-group selected="professional-skill">
+          <paper-radio-button name="infomation" label="Information Engineering"></paper-radio-button>
+          <paper-radio-button name="infomation-network" label="Information Network Engineering"></paper-radio-button>
+          <paper-radio-button name="computer-control" label="Computer Control Engineering"></paper-radio-button>
+          <paper-radio-button name="computer-system-design" label="Computer System Design Engineering"></paper-radio-button>
+        </paper-radio-group>
+
+      </section>
+
+<!--
+      <section horizontal end-justified layout>
+        <paper-button raised class="hover"><a href="/#/study-result">Next</a></paper-button>
+      </section>
+-->
+      
+      <r2als-anchor-button page="study-result">Next</r2als-anchor-button>
+
+    </main-layout>
+  </template>
+</polymer-element>

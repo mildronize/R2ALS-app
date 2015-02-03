@@ -1,0 +1,5 @@
+# Remote Sync for Atom
+.remote-sync.json
+
+# web components by bower
+components

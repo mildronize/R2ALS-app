@@ -1,0 +1,55 @@
+<link rel="import" href="/components/paper-shadow/paper-shadow.html">
+<link rel="import" href="/components/paper-fab/paper-fab.html">
+
+
+<link rel="import" href="r2als-subject.html">
+
+<polymer-element name="r2als-subject-group" attributes="subjectInSemester items">
+  <template>
+    <style>
+      section{
+        border-bottom: 1px solid #EEEEEE;
+        padding-bottom: 10px;
+      }
+      paper-shadow{
+/*        max-width: 10.5em;*/
+        width: 80%;
+      }
+    </style>
+    <section>
+      <h4>Year {{subjectInSemester.year}} Semester {{subjectInSemester.semester}}</h4>
+        <div flex>
+          <paper-shadow on-destroy-item={{destroyItemAction}}>
+            <template repeat="{{subject in subjectInSemester.subjects}}" > 
+              <r2als-subject name="{{subject.name}}" grade="{{subject.grade}}" item="{{}}"></r2als-subject> 
+            </template> 
+           </paper-shadow>
+        </div>
+    </section>
+    
+  </template>
+    <script>
+      Polymer('r2als-subject-group', {
+        
+        // initialize the element's model
+        ready: function() {
+        },
+        
+        itemChanged: function(){
+          this.fire('change-item', this.items);
+        },
+        
+        destroyItemAction: function(e, detail) {
+//            this.model.destroyItem(detail);
+          var i = this.subjectInSemester.subjects.indexOf(detail.subject);
+          if (i >= 0) {
+              this.subjectInSemester.subjects.splice(i, 1);
+              this.itemChanged();
+          }else{
+            console.error("Not found subject object: ");
+          }
+        }
+        
+      });
+  </script>
+</polymer-element>

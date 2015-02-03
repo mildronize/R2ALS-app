@@ -1,0 +1,36 @@
+/*Paper-button*/
+paper-button a:link,
+paper-button a:visited{
+  /* unvisited link */
+  color: #212121;
+  text-decoration: none;
+}
+
+paper-button a:hover,
+paper-button a:active{
+  color: #212121;
+  text-decoration: none;
+}
+
+paper-button.hover:hover {
+  background: #F5F5F5;
+}
+
+paper-button.colored {
+    color: #4285f4;
+}
+
+/*Paper fab*/
+.add-fab{
+  position: absolute;
+  z-index: 1;
+  right:40px;
+  top:35px;
+  background-color: #FF9800;
+/*        display: none;*/
+}
+.add-fab[visible] {
+  display: inline-block;
+
+  
+  

@@ -1,0 +1,115 @@
+<link rel="import" href="/components/core-item/core-item.html">
+<link rel="import" href="/components/core-selector/core-selector.html">
+
+<link rel="import" href="/components/paper-item/paper-item.html">
+<link rel="import" href="/components/paper-shadow/paper-shadow.html">
+<link href="/components/paper-icon-button/paper-icon-button.html" rel="import">
+<link href="/components/paper-dropdown/paper-dropdown.html" rel="import">
+<link href="/components/paper-button/paper-button.html" rel="import">
+
+
+<!--
+
+<polymer-element name="r2als-char-icon-button" extends="paper-icon-button" relative on-tap="{{toggle}}" attributes="char" noink>
+  <template>
+    <style>
+      .circle {
+        fill: #0b50bf;
+      }
+      
+    </style>
+    <shadow></shadow>
+    <content>
+      <link rel="import" href="/components/core-iconset-svg/core-iconset-svg.html">
+      <link rel="import" href="/components/font-roboto/roboto.html">
+      <core-iconset-svg id="custom-icons" iconSize="40">
+        <svg>
+          <defs>
+            <g id="char-icon">
+              <circle class="circle" cx="20" cy="20" r="20" />
+              <text class="text" x="18" y="30" fill="white" style="stroke: none; font-size: 20px;">{{char}}</text>
+            </g>
+          </defs>
+        </svg>
+      </core-iconset-svg>
+    </content>
+  </template>
+  <script>
+    Polymer({
+      
+    });
+  </script>
+</polymer-element>
+-->
+
+<!--
+<polymer-element name="x-trigger" extends="r2als-char-icon-button" relative on-tap="{{toggle}}" noink>
+  <template>
+    <shadow></shadow>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      toggle: function() {
+        if (!this.dropdown) {
+          this.dropdown = this.querySelector('paper-dropdown');
+        }
+        this.dropdown && this.dropdown.toggle();
+      }
+    });
+  </script>
+</polymer-element>
+-->
+
+<polymer-element name="r2als-semester-selector" attributes="semester year" noscript>
+  <template>
+    <link rel="stylesheet" href="/css/selector.css" shim-shadowdom>
+    <style>
+      .space{
+        margin: 0px 10px;
+      }
+/*
+      x-trigger {
+        z-index: auto;
+      }
+      .semester-item{
+        font-weight: bold;
+        min-width: 0em;
+      }
+*/
+      .number{
+        width: 80px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .slash{
+        font-size: 20px;
+        font-weight: bold; 
+      }
+      .text-right{
+        text-align: right;
+      }
+    </style>
+    <paper-shadow>
+      <div horizontal layout>
+        <div flex></div>
+          <div class="number">
+            <paper-input-decorator label="Year" floatingLabel>
+              <input class="text-right" type="number" is="core-input" value="{{year}}" id="year" required maxlength="2" min="1">
+            </paper-input-decorator>
+          </div>
+          <div class="slash space" horizontal layout center>
+            /
+          </div>
+          <div class="number">
+            <paper-input-decorator label="Semester" floatingLabel>
+              <input is="core-input" type="number" value="{{semester}}" id="semester" required maxlength="1" min="1">
+            </paper-input-decorator>
+
+          </div>
+        <div flex></div>
+      </div>
+    </paper-shadow>
+
+  </template>
+</polymer-element>

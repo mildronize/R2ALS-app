@@ -1,0 +1,13 @@
+
+
+.paper-item-horizontal{
+  display: inline-block;
+  min-width: 0em;
+}
+.paper-item-horizontal::shadow .button-content{
+  padding:5px 5px;
+}
+.core-selected {
+  background-color: #BDBDBD;
+  font-weight: bold;
+}

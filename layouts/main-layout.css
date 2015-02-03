@@ -1,0 +1,61 @@
+body {
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  font-size: 14px;
+  margin: 0;
+  padding: 24px;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+}
+
+/** main content */
+:host /deep/ core-header-panel[main] {
+  background-color: #fff;
+}
+.content {
+  padding: 20px;
+}
+
+/** sidebar */
+core-header-panel core-item {
+  padding: 2px 12px;
+  line-height: 40px;
+}
+/*
+core-header-panel  core-item:not(:first-of-type) {
+  border-top: 1px solid #F5F5F5;
+}
+*/
+core-header-panel core-item:hover,
+core-header-panel core-item:focus {
+  background-color: #E0E0E0;
+  color: #222;
+}
+core-header-panel core-item[active] {
+  border-right: 6px solid #9E9E9E;
+  background-color: #ECEFF1;
+}
+
+/*
+http://stackoverflow.com/questions/24594333/polymer-core-scaffold-coloring-and-paper-button
+*/
+core-scaffold core-toolbar {
+  /* Blue 500 */
+  background: #2196F3;
+  color: white;
+}
+core-scaffold core-header-panel {
+  /* Blue 500 */
+  background: #F5F5F5; 
+  color: black;
+}
+
+core-scaffold::shadow core-toolbar {
+  background: #2196F3;
+  color: white;
+}
+
+core-scaffold::shadow core-header-panel {
+  background: white; 
+  color: black;
+}
+

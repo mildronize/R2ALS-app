@@ -1,0 +1,19 @@
+<link rel="import" href="/components/paper-button/paper-button.html">
+
+<polymer-element name="r2als-anchor-button" attributes="page" noscript>
+  <template>
+    <style>
+    paper-button{
+      margin: 10px 0px;
+    }
+    </style>
+    <link rel="stylesheet" href="/css/main.css" shim-shadowdom>
+    <div horizontal center-justified layout>
+      <paper-button raised class="colored"><a href="/#/{{page}}">
+        <div class="content">
+          <content></content>
+        </div>  
+      </a></paper-button>
+    </div>
+  </template>
+</polymer-element>

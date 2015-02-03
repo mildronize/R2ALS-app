@@ -1,0 +1,10 @@
+<link rel="import" href="r2als-subject.html">
+
+<polymer-element name="r2als-subject-display" attributes="subjectItems" noscript>
+  <template>
+
+    <template repeat="{{subjectItem in subjectItems}}">
+      <r2als-subject name="{{subjectItem.name}}" grade="{{subjectItem.grade}}"></r2als-subject>
+    </template>
+  </template>
+</polymer-element>

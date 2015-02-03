@@ -1,0 +1,68 @@
+<link rel="import" href="/components/paper-item/paper-item.html">
+<link rel="import" href="/components/core-item/core-item.html">
+<link rel="import" href="/components/core-selector/core-selector.html">
+<link rel="import" href="/components/paper-shadow/paper-shadow.html">
+<!--<link href="/components/paper-ripple/paper-ripple.html" rel="import">-->
+
+<!--
+@attributes
+grade - 'A','B+','B','C+','C','D+','D','E','W','S','U'
+gradeOption - "credit" or "audit"
+-->
+<polymer-element name="r2als-grade-selector" attributes="grade gradeOption">
+  <template>
+    <link rel="stylesheet" href="/css/grade.css" shim-shadowdom>
+    <link rel="stylesheet" href="/css/selector.css" shim-shadowdom>
+    <style>
+      .space{
+        margin: 0px 10px;
+      }
+      
+      .subject_types{
+        font-size: 14px;
+        min-width: 0em;
+      }
+    </style>
+    
+    <div horizontal layout>
+      <div>
+        
+        <paper-shadow class="space">
+          <core-selector selected="{{gradeOption}}" valueattr="label">
+            <template repeat="{{subject_type in subject_types}}">
+              <paper-item label="{{subject_type | toLowerCase}}" class="subject_types" on-tap={{resetGrade}}>{{subject_type}}</paper-item>
+            </template>
+          </core-selector>
+        </paper-shadow>
+      </div>
+      <div flex>
+        
+        <paper-shadow>
+          <core-selector selected="{{grade}}" valueattr="label">
+            <template repeat="{{gradeItem in grades[gradeOption]}}" >
+              <paper-item label="{{gradeItem}}" class="paper-item-horizontal"><div class="grade grade-invert">{{gradeItem}}</div></paper-item>
+            </template>
+          </core-selector>
+        </paper-shadow>
+      </div>
+    </div>
+    
+  </template>
+  <script>
+    Polymer('r2als-grade-selector',{
+      ready: function() {
+          this.subject_types = ["Credit","Audit"];
+          this.grades = {
+            "credit" : ['A','B+','B','C+','C','D+','D','E','W'],
+            "audit" : ['S','U','W']
+          };
+        },
+      toLowerCase: function(value) {  
+          return value.toLowerCase();
+      },
+      resetGrade: function() {
+        this.grade = "";
+      }
+    });
+  </script>
+</polymer-element>
