@@ -1,5 +1,10 @@
 (function () {
   'use strict';
+//  
+//Name: Thada Wangthammang
+//Github: https://github.com/mildronize/R2ALS-app
+//E-mail: mildronize@gmail.com
+//
 //  "study-result-page" Section
 
   var n = 0;
