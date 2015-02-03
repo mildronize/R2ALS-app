@@ -39,6 +39,10 @@
           width: 100%;
         }
       }
+      .message{
+        padding: 20px; 
+        margin: 20px 0px;
+      }
       
 
     </style>
@@ -55,6 +59,12 @@
           <r2als-subject-group subjectInSemester="{{subjectInSemester}}" items={{}}></r2als-subject-group>
         </template>
       </section>
+      
+      <paper-shadow class="message" hidden?="{{hideMessage}}">
+        <section horizontal center-justified center layout>
+          The enrolled subjects is empty. Please click <paper-fab mini icon="add" class="example-fab"  on-tap="{{toggleDialog}}"></paper-fab> on the top right corner for adding your subject.  
+        </section>
+      </paper-shadow>
 
       <r2als-anchor-button page="get-plans">Next</r2als-anchor-button>
 <!--
@@ -71,7 +81,7 @@
 -->
       
       <!--  Add subject dialog    -->
-      <r2als-paper-action-dialog heading="Add subject" backdrop autoCloseDisabled layered="false" id="addSubjectItem">
+      <r2als-paper-action-dialog heading="Add subject" backdrop layered="false" id="addSubjectItem">
         <p>
           <r2als-add-subject subjectItem={{tempSubjectData}}></r2als-add-subject>
         </p>

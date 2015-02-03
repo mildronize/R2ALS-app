@@ -3,6 +3,7 @@
 <link rel="import" href="/components/core-header-panel/core-header-panel.html">
 <link rel="import" href="/components/core-toolbar/core-toolbar.html">
 <link rel="import" href="/components/core-item/core-item.html">
+<link rel="import" href="/components/core-menu/core-submenu.html">
 <link rel="import" href="/components/font-roboto/roboto.html">
 
 <link rel="import" href="/components/paper-fab/paper-fab.html">
@@ -25,11 +26,18 @@
         <core-toolbar>
           <span>R2ALS</span>
         </core-toolbar>
-          <core-item icon="home" label="Home" active?="{{selected == 'home'}}"><a href="/#"></a></core-item>
-          <core-item icon="account-box" label="Profile" active?="{{selected == 'profile'}}"><a href="/#/profile"></a></core-item>
-          <core-item icon="social:school" label="Study Result" active?="{{selected == 'study-result'}}"><a href="/#/study-result"></a></core-item>
-          <core-item icon="receipt" label="Get Plan" active?="{{selected == 'get-plans'}}"><a href="/#/get-plans"></a></core-item>
-          <core-item icon="exit-to-app" label="GitHub"><a href="https://github.com/mildronize/R2ALS"></a></core-item>
+          <core-item class="main-menu" icon="home" label="Home" active?="{{selected == 'home'}}"><a href="/#"></a></core-item>
+          <core-item class="main-menu" icon="account-box" label="Profile" active?="{{selected == 'profile'}}"><a href="/#/profile"></a></core-item>
+          <core-item class="main-menu" icon="social:school" label="Study Result" active?="{{selected == 'study-result'}}"><a href="/#/study-result"></a></core-item>
+          <core-item class="main-menu" icon="receipt" label="Get Plan" active?="{{selected == 'get-plans'}}"><a href="/#/get-plans"></a></core-item>
+<!--          <core-item icon="exit-to-app" label="GitHub"><a href="https://github.com/mildronize/R2ALS"></a></core-item>-->
+          <core-menu id="core_menu">
+
+            <core-submenu id="core_submenu1" icon="exit-to-app" label="GitHub">
+              <core-item label="R2ALS Server" horizontal center layout><a href="https://github.com/mildronize/R2ALS" target="_blank"></a></core-item>
+              <core-item  label="R2ALS App" horizontal center layout><a href="https://github.com/mildronize/R2ALS-app" target="_blank"></a></core-item>
+            </core-submenu>
+          </core-menu>
       </core-header-panel>
       <div tool>
         <content select=".title"></content>

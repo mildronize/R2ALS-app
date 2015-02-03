@@ -7,16 +7,33 @@
 <link rel="import" href="/components/paper-button/paper-button.html">
 
 <link rel="import" href="/elements/r2als-anchor-button.html">
+<link rel="import" href="/components/core-ajax/core-ajax.html">
 
 <script src="/components/jquery/dist/jquery.min.js"></script>
 <!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
 
 
-<polymer-element name="get-plans-page" noscript>
+<polymer-element name="get-plans-page">
   <template>
+    <style>
+      .json{
+        white-space: pre;
+        font-family: monospace;
+      }
+    </style>
     <link rel="stylesheet" href="/css/main.css" shim-shadowdom>
     <main-layout selected="get-plans">
       <div class="title">Get Plans</div>
+      
+      <core-ajax auto url="//gdata.youtube.com/feeds/api/videos/" params='{"alt":"json", "q":"game"}' handleAs="json" on-core-response="{{handleResponse}}"></core-ajax>
+
+      <template repeat="{{response.feed.entry}}">
+        <div>{{title.$t}}</div>
+      </template>
+      
+      <section class="json">
+        {{json}}
+      </section>
       
      
       

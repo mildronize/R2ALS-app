@@ -29,6 +29,11 @@ paper-button.colored {
   background-color: #FF9800;
 /*        display: none;*/
 }
+.example-fab{
+  background-color: #757575;
+  margin: 0px 10px;
+  display: inline-block;
+}
 .add-fab[visible] {
   display: inline-block;
 

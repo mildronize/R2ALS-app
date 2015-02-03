@@ -16,7 +16,7 @@ body {
 }
 
 /** sidebar */
-core-header-panel core-item {
+core-header-panel .main-menu{
   padding: 2px 12px;
   line-height: 40px;
 }
@@ -25,15 +25,38 @@ core-header-panel  core-item:not(:first-of-type) {
   border-top: 1px solid #F5F5F5;
 }
 */
+core-header-panel .main-menu:hover,
+core-header-panel .main-menu:focus,
 core-header-panel core-item:hover,
-core-header-panel core-item:focus {
+core-header-panel core-item:focus{
   background-color: #E0E0E0;
   color: #222;
+  
 }
-core-header-panel core-item[active] {
+core-header-panel .main-menu[active] {
   border-right: 6px solid #9E9E9E;
   background-color: #ECEFF1;
+  font-weight: bold;
 }
+
+core-header-panel core-submenu{
+  border-top: 1px solid #EEEEEE;
+  padding-top: 10px;
+}
+
+core-header-panel core-submenu::shadow #submenuItem{
+  cursor: pointer;
+  font-weight: none;
+}
+
+/*
+core-header-panel core-submenu::shadow #submenu,
+core-header-panel core-submenu::shadow .core-selected{
+  font-weight: bold;
+  margin-left: 20px;
+}
+*/
+
 
 /*
 http://stackoverflow.com/questions/24594333/polymer-core-scaffold-coloring-and-paper-button
