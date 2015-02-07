@@ -22,6 +22,7 @@
     // initialize the element's model
     ready: function () {
       console.log("App ready");
+      location.href = "#/";
     },
     stateChange: function (event) {
       //   console.log(document.querySelector('study-result-page'));
