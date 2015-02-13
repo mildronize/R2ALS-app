@@ -22,7 +22,16 @@
     // initialize the element's model
     ready: function () {
       console.log("App ready");
-      location.href = "#/";
+//      location.href = "#/";
+      var current_url = document.URL.toString();
+      var len = current_url.length - 2;
+      var str_ck = current_url.substr(len);
+      if(str_ck != '#/' & str_ck.charAt(1) == '/' ){
+        location.href = "#/";
+      }
+      console.log(str_ck);
+      console.log(document.URL);
+//      console.log(current_url.length);
     },
     stateChange: function (event) {
       //   console.log(document.querySelector('study-result-page'));
@@ -42,7 +51,18 @@
   });
   
   Polymer('profile-page', {
-  
+    created: function() { 
+      this.subject_group = models.member.subject_group;
+      this.branch = models.member.branch;
+    },
+    subject_groupChanged: function(oldValue, newValue) {
+      models.member.subject_group = newValue;
+      console.log(newValue);
+    },
+    branchChanged: function(oldValue, newValue) {
+      models.member.branch = newValue;
+      console.log(newValue);
+    }
   });
     
   Polymer('study-result-page', {
@@ -56,18 +76,8 @@
     ready: function () {
       console.log("study-result-page ready " + n);
       this.initialData();
-//            this.message = {};
-//      this.subjectInSemesters = [];
-//      this.subjectInSemesters = [];
-//      this.changeData();
     },
-//    showMessage: function (msg){
-//      this.message.data = msg;
-//      this.message.isVisible = true;
-//    },
-//    hideMessage: function (){
-//      this.message = {};
-//    }, 
+
     toggleDialog: function () {
       this.$.addSubjectItem.toggle();
     },
@@ -89,6 +99,7 @@
     },
     addSubject: function (){
       var found = false;
+      console.log(this.tempSubjectData);
       if(this.subjectInSemesters.length > 0){
         
         for(var i=0 ;i< this.subjectInSemesters.length; i++){
@@ -102,6 +113,7 @@
         }
 
       }
+      // If not found the semester
       if(!found | this.subjectInSemesters.length == 0) {
         var tmp = this.addSemester(this.tempSubjectData.year, this.tempSubjectData.semester);
         tmp.subjects.push(this.tempSubjectData);
@@ -138,8 +150,6 @@
       }
     },
     changeData: function(){
-//      console.log(typeof this.subjectInSemesters);
-      console.log("Some data is changed");
       models.semesters = this.subjectInSemesters;
       if ( this.subjectInSemesters.length == 0 | typeof this.subjectInSemesters === 'undefined' ) {
         this.hideMessage = false;
@@ -163,6 +173,7 @@
       validateData();
     },
     ready: function () {
+//      this.models = models;
       this.json = JSON.stringify(models, null, 4);
     },
     sendData: function(){

@@ -44,6 +44,8 @@
     "paper-toast": "Polymer/paper-toast#master",
     "paper-toggle-button": "Polymer/paper-toggle-button#master",
     "sampler-scaffold": "Polymer/sampler-scaffold#master",
+  
+    
     "app-router": "erikringsmuth/app-router#master",
     "flatiron-director": "PolymerLabs/flatiron-director#master",
     "pushstate-anchor": "~0.3.0",

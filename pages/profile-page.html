@@ -27,7 +27,7 @@
       <section>
         <h4>Your student group</h4>
 
-        <paper-radio-group selected="subject-group">
+        <paper-radio-group selected="{{subject_group}}" valueattr="name">
           <paper-radio-button name="first-group" label="First group (A - I)"></paper-radio-button>
           <paper-radio-button name="second-group" label="Second group (J - R)"></paper-radio-button>
         </paper-radio-group>
@@ -36,7 +36,7 @@
       <section>
         <h4>Your professional skill</h4>
 
-        <paper-radio-group selected="professional-skill">
+        <paper-radio-group selected="{{branch}}" valueattr="name">
           <paper-radio-button name="infomation" label="Information Engineering"></paper-radio-button>
           <paper-radio-button name="infomation-network" label="Information Network Engineering"></paper-radio-button>
           <paper-radio-button name="computer-control" label="Computer Control Engineering"></paper-radio-button>

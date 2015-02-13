@@ -8,6 +8,7 @@
 
 <link rel="import" href="../elements/r2als-anchor-button.html">
 <link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../components/core-shared-lib/core-shared-lib.html">
 
 <script src="../components/jquery/dist/jquery.min.js"></script>
 <!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
@@ -25,12 +26,43 @@
     <main-layout selected="get-plans">
       <div class="title">Get Plans</div>
       
-      <core-ajax auto url="//gdata.youtube.com/feeds/api/videos/" params='{"alt":"json", "q":"game"}' handleAs="json" on-core-response="{{handleResponse}}"></core-ajax>
+<!--      <core-ajax auto url="//gdata.youtube.com/feeds/api/videos/" params='{"alt":"json", "q":"game"}' handleAs="json" on-core-response="{{handleResponse}}"></core-ajax>
+-->
+      
+      <core-ajax 
+        auto 
+        url="http://127.0.0.1:6543/apis/processor" 
+        method='POST' 
+        handleAs="json"
+        on-core-response="{{handleResponse}}"
+        body="{{json}}">
+      </core-ajax>
+      
+<!--      <core-xhr id="xhr"></core-xhr>-->
 
+      
+<!--
+      <polymer-jsonp 
+          auto 
+          url="http://127.0.0.1:6543/apis/subjects/math" 
+          on-polymer-response="{{handleResponse}}">
+      </polymer-jsonp>
+-->
+<!--      http://127.0.0.1:6543/apis/subjects/math-->
+      
+<!--      <core-shared-lib on-core-shared-lib-load="{{handleResponse}}" url="http://127.0.0.1:6543/apis/subjects/math%%callback%%"></core-shared-lib>-->
+      
+      <template repeat="{{response.data.subjects}}">
+        <div>{{name}}</div>
+      </template>
+      {{response.type}} <br/>
+      {{response.message}}
+<!--
       <template repeat="{{response.feed.entry}}">
         <div>{{title.$t}}</div>
       </template>
       
+-->
       <section class="json">
         {{json}}
       </section>

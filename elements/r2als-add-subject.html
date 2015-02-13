@@ -7,7 +7,7 @@
 <link rel="import" href="r2als-grade-selector.html">
 <link rel="import" href="r2als-semester-selector.html">
 
-<polymer-element name="r2als-add-subject" attributes="subjectItem" noscript>
+<polymer-element name="r2als-add-subject" attributes="subjectItem url" >
   <template>
     <style>
 /*
@@ -48,11 +48,33 @@
     }
     </style>
     
-    <r2als-paper-autocomplete id="chisele" label="Enter subject or code" remote="http://maps.googleapis.com/maps/api/geocode/json?address=" root="results" filds="formatted_address" placeholder="Type someting" sValue="{{subjectItem.name}}"></r2als-paper-autocomplete>
+    <r2als-paper-autocomplete 
+                              id="chisele" 
+                              label="Enter subject or code" 
+                              remote="{{url}}" 
+                              root="data.subjects" 
+                              filds="code,name" 
+                              placeholder="Type someting" 
+                              sValue="{{subjectItem.name}}" 
+                              selectedObject="{{selectedSubject}}"></r2als-paper-autocomplete>
     <h6>Select the year & the semester</h6>
     <r2als-semester-selector year="{{subjectItem.year}}" semester="{{subjectItem.semester}}"></r2als-semester-selector>
     <h6>Select your grade</h6>
     <r2als-grade-selector gradeOption="{{subjectItem.gradeOption}}" grade="{{subjectItem.grade}}"></r2als-grade-selector>
     
   </template>
+  <script>
+    Polymer({
+      created: function(){
+
+      },
+      selectedSubjectChanged: function(oldValue, newValue) {
+        console.log(this.selectedSubject);
+        this.subjectItem.id = this.selectedSubject.id
+        this.subjectItem.year = this.selectedSubject.year
+        this.subjectItem.semester = this.selectedSubject.semester
+      }
+    
+    });
+  </script>
 </polymer-element>

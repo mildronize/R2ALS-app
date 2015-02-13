@@ -1,28 +1,180 @@
 <link rel="import" href="../components/paper-item/paper-item.html">
 <link rel="import" href="../components/paper-shadow/paper-shadow.html">
+<script src="../components/microajax/microajax.minified.js"></script>
+<!--<link rel="import" href="../components/chisele/chisele.html" >-->
+<!-- Modify form chisele-->
 
-<link rel="import" href="../components/chisele/chisele.html" >
+<script>
+var searchLocal = function (data, wordSearch) {
+  "use strict";
 
-<polymer-element name="r2als-paper-autocomplete" extends="chi-sele" attributes="label sValue" noscript>
+  var
+    wordList = [], //set a word lists to send a result.
+    i = 0,
+    word,
+    json;
+
+  while (i < data.length) {
+    word = data[i].toLowerCase();
+    if (word.search(wordSearch.toLowerCase()) !== -1) {
+      json = {name: data[i]};
+      wordList.push(json);
+    }
+    i++;
+  }
+
+  return (wordList);
+};
+
+
+var searchIntroJson = function (dataUrl, root, keyList, wordSearch) {
+  'use strict';
+
+  var
+    wordList = [],
+    k,
+    i = 0,
+    word,
+    json,
+    x = 0,
+    suggestionNames = [],
+    value,
+    data = [],
+    suggestion,
+    rootList = [];
+
+  microAjax(dataUrl, function (json) {
+    data = JSON.parse(json);
+
+    if (root) {
+      rootList = root.split('.');
+      console.log(rootList);
+      for (i = 0; i < rootList.length;i++){
+        data = data[rootList[i]];
+        console.log(data);
+      }
+//      data = data[root];
+//      console.log(data);
+    }
+
+    while (i < data.length) {
+      suggestionNames = [];
+      value = '';
+
+      for (x = 0; x < keyList.length; x++) {
+        k = keyList[x];
+        suggestionNames.push(data[i][k]);
+      }
+
+      value = suggestionNames.join(' ').toLowerCase();
+      suggestion = suggestionNames.join(' ');
+
+      if (value.search(wordSearch.toLowerCase()) !== -1) {
+        json = {
+          name: suggestion,
+          originalData: data[i]
+        };
+        wordList.push(json);
+      }
+
+      i++;
+    }
+  });
+
+  return (wordList);
+};
+
+var searchRemote = function (data, wordSearch, key, url, root) {
+  "use strict";
+
+  var
+    i = 0,
+    word,
+    json,
+    keyList,
+    x = 0,
+    k,
+    suggestionNames = [],
+    value,
+    data = [],
+    dataUrl;
+
+  keyList = key.split(',');
+
+  dataUrl = url + wordSearch;
+
+  if (wordSearch === '') {
+    return (null);
+  }
+  var re = searchIntroJson(dataUrl, root, keyList, wordSearch);
+  return (re);
+};
+
+var searchSuggestions = function (data, wordSearch, key, url, root){
+  'use strict';
+
+  if(url !== ''){
+    return (searchRemote(data, wordSearch, key, url, root));
+  }else{
+    return (searchLocal(data, wordSearch));
+  }
+}
+</script>
+
+<polymer-element name="r2als-paper-autocomplete" attributes="label sValue local placeholder remote filds root class selectedObject">
   
 <template>
 <!--   Document -- http://btripoloni.github.io/chisele/-->
   <paper-input-decorator label="{{label}}" floatingLabel>
-    <input id="form" value="{{ sValue }}" on-keyup="{{ keypress }}" placeholder="{{ placeholder }}" class="{{ class }}" on-blur="{{ blur }}" />
+    <input id="form" value="{{ sValue }}" on-keyup="{{ keypress }}" placeholder="{{ placeholder }}" class="{{ class }}" on-blur="{{ blur }}"  />
   </paper-input-decorator>
 
   <template if="{{ open }}">
     <paper-shadow>
       <div id="chiseleResults" style="">
         <template repeat="{{suggestions}}">
-          <p on-tap="{{ toInput }}">
+          <p on-tap="{{ toInput }}" id="{{originalData.id}}" year="{{originalData.year}}" semester="{{originalData.semester}}" code="{{originalData.code}}">
             {{name}}
           </p>
+          
         </template>
 
       </div>
     </paper-shadow>
   </template>
 </template>
+  <script>
+    var sander;
+    Polymer('r2als-paper-autocomplete',{
+      local: [],
+      remote: '',
+      root: null,
+      open: false,
+      keypress: function(){
+        this.open = true;
+        this.suggestions = searchSuggestions(this.local, this.sValue, this.filds, this.remote, this.root);
+      },
+      toInput: function(event,detail,sender){
+//        this.sValue = sender.innerHTML.trim();
+        this.sValue = sender.innerHTML.trim()
+        //this.suggestions = null;
+        this.open = false;
+        this.selectedObject = {
+          id: sender.getAttribute('id'),
+          code: sender.getAttribute('code'),
+          year: sender.getAttribute('year'),
+          semester: sender.getAttribute('semester')
+        }
+
+      },
+      blur: function(){
+        var h = this;
+        window.setTimeout(function(){
+          h.open = false;
+        }, 100);
+      }
+    });
+
+  </script>
   
 </polymer-element>
