@@ -7,8 +7,10 @@
 <link rel="import" href="../components/paper-button/paper-button.html">
 
 <link rel="import" href="../elements/r2als-anchor-button.html">
+<link rel="import" href="../elements/r2als-paper-action-dialog.html">
+
 <link rel="import" href="../components/core-ajax/core-ajax.html">
-<link rel="import" href="../components/core-shared-lib/core-shared-lib.html">
+<link rel="import" href="../components/paper-spinner/paper-spinner.html">
 
 <script src="../components/jquery/dist/jquery.min.js"></script>
 <!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
@@ -20,6 +22,21 @@
       .json{
         white-space: pre;
         font-family: monospace;
+      }
+      paper-spinner.blue::shadow .circle {
+        border-color: #4285f4;
+      }
+
+      paper-spinner.red::shadow .circle {
+        border-color: #db4437;
+      }
+
+      paper-spinner.yellow::shadow .circle {
+        border-color: #f4b400;
+      }
+
+      paper-spinner.green::shadow .circle {
+        border-color: #0f9d58;
       }
     </style>
     <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
@@ -35,6 +52,7 @@
         method='POST' 
         handleAs="json"
         on-core-response="{{handleResponse}}"
+        on-core-error="{{handleError}}"
         body="{{json}}">
       </core-ajax>
       
@@ -55,21 +73,35 @@
       <template repeat="{{response.data.subjects}}">
         <div>{{name}}</div>
       </template>
+<!--
       {{response.type}} <br/>
       {{response.message}}
+-->
 <!--
       <template repeat="{{response.feed.entry}}">
         <div>{{title.$t}}</div>
       </template>
       
 -->
+      
+      <paper-spinner id="loading" class="blue" active></paper-spinner>
+      
       <section class="json">
         {{json}}
       </section>
       
-     
       
-<!--      <r2als-anchor-button page="profile">Next</r2als-anchor-button>-->
+      
+      <!--  Add subject dialog    -->
+      <r2als-paper-action-dialog heading="{{messageHeading}}" backdrop layered="false" id="messageDialog">
+        <template repeat="{{mb in messageBody}}">
+          <p>
+            {{mb}}
+          </p>
+        </template>
+        <paper-button dismissive autofocus class="colored">Close</paper-button>
+      </r2als-paper-action-dialog>
+      <!--  Add subject dialog    -->  
     
       
     </main-layout>

@@ -16,13 +16,15 @@
   function validateData(){
     console.log("validateData");
   }
+  function capitaliseFirstLetter(string){
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   var n = 0;
 
   Polymer('main-app', {
     // initialize the element's model
     ready: function () {
       console.log("App ready");
-//      location.href = "#/";
       var current_url = document.URL.toString();
       var len = current_url.length - 2;
       var str_ck = current_url.substr(len);
@@ -31,13 +33,21 @@
       }
       console.log(str_ck);
       console.log(document.URL);
-//      console.log(current_url.length);
     },
     stateChange: function (event) {
       //   console.log(document.querySelector('study-result-page'));
       console.log("Event: " + event); 
       n += 1;
-    }
+    },
+//    storageIdChanged: function() {
+////      console.log(this.storageId);
+//      this.storage = document.querySelector('#' + this.storageId);
+//      if (this.storage) {
+//          models = this.storage.value;
+//      }
+//    }
+    
+    
   });
   
   Polymer('home-page', {
@@ -179,8 +189,36 @@
     sendData: function(){
     
     },
+    handleError: function(e){
+        var xhr = e.detail.xhr;
+        this.messageHeading = "Error";
+        this.messageBody = [];
+        this.messageBody[0] = "The service is unavailable or too busy.";
+        this.messageBody[1] = xhr.status + " " + xhr.statusText;
+        this.messageBody[2] = " " + xhr.responseURL;
+        this.$.messageDialog.toggle();
+        console.log(e);
+        console.error(this.messageBody[1] + this.messageBody[2]);
+        this.$.loading.active = false;
+    },
     handleResponse: function(e){
-      this.response = e.detail.response;
+      console.log(e);
+      if(e.detail.xhr.status != 0){
+        this.response = e.detail.response;
+        if( this.response.type != "success"){
+          this.messageHeading = capitaliseFirstLetter(this.response.type);
+          this.messageBody = [];
+          this.messageBody[0] = this.response.message;
+          this.$.messageDialog.toggle();
+        }
+      }else {
+        this.messageHeading = "Error";
+        this.messageBody = [];
+        this.messageBody[0] = "The service is unavailable";
+        this.$.messageDialog.toggle();
+        console.error("The service is unavailable");
+      }
+      this.$.loading.active = false;
     }
     
     

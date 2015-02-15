@@ -23,6 +23,8 @@
     "core-scroll-header-panel": "Polymer/core-scroll-header-panel#master",
     "core-scaffold": "Polymer/core-scaffold#master",
     "core-list": "Polymer/core-list#master",
+    "core-localstorage": "Polymer/core-localstorage#master",
+    
     "paper-button": "Polymer/paper-button#master",
     "paper-checkbox": "Polymer/paper-checkbox#master",
     "paper-dialog": "Polymer/paper-dialog#master",
