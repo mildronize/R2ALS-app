@@ -34,6 +34,7 @@ var searchIntroJson = function (dataUrl, root, keyList, wordSearch) {
     wordList = [],
     k,
     i = 0,
+    j = 0,
     word,
     json,
     x = 0,
@@ -48,15 +49,11 @@ var searchIntroJson = function (dataUrl, root, keyList, wordSearch) {
 
     if (root) {
       rootList = root.split('.');
-      console.log(rootList);
-      for (i = 0; i < rootList.length;i++){
-        data = data[rootList[i]];
+      for (j = 0; j < rootList.length;j++){
+        data = data[rootList[j]];
         console.log(data);
       }
-//      data = data[root];
-//      console.log(data);
     }
-
     while (i < data.length) {
       suggestionNames = [];
       value = '';
@@ -68,19 +65,23 @@ var searchIntroJson = function (dataUrl, root, keyList, wordSearch) {
 
       value = suggestionNames.join(' ').toLowerCase();
       suggestion = suggestionNames.join(' ');
-
+      
       if (value.search(wordSearch.toLowerCase()) !== -1) {
         json = {
           name: suggestion,
           originalData: data[i]
         };
         wordList.push(json);
+      }else {
+        console.error("sth wrong");
       }
-
       i++;
+      
     }
+    
   });
 
+//  console.log("Length"+wordList.length);
   return (wordList);
 };
 

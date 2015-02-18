@@ -54,7 +54,7 @@
       <div class="title">Study Result</div>
       <h3>Step 3: Add your subjects and grades</h3>
       
-      <section  on-change-item="{{changeItemAction}}">
+      <section on-change-item="{{changeItemAction}}">
         <template repeat="{{subjectInSemester in subjectInSemesters}}">
           <r2als-subject-group subjectInSemester="{{subjectInSemester}}" items={{}}></r2als-subject-group>
         </template>
@@ -67,19 +67,7 @@
       </paper-shadow>
 
       <r2als-anchor-button page="get-plans">Next</r2als-anchor-button>
-<!--
-      <template repeat="{{test in tests}}">
-        <p>Y: {{test.year}} S: {{test.semester}}</p>
-      </template>
-      <p></p>
--->
-<!--
-      <p>Name: {{tempSubjectData.name}}</p>
-      <p>Semester: {{tempSubjectData.year}} / {{tempSubjectData.semester}}</p>
-      <p>Grade Option: {{tempSubjectData.gradeOption}}</p>
-      <p>Grade: {{tempSubjectData.grade}}</p>
--->
-      
+
       <!--  Add subject dialog    -->
       <r2als-paper-action-dialog heading="Add subject" backdrop layered="false" id="addSubjectItem">
         <p>
