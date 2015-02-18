@@ -9,8 +9,13 @@
 <link rel="import" href="../elements/r2als-anchor-button.html">
 <link rel="import" href="../elements/r2als-paper-action-dialog.html">
 
+<link rel="import" href="../elements/get-plans/full-detail-view.html">
+<link rel="import" href="../elements/get-plans/json-view.html">
+<link rel="import" href="../elements/get-plans/compact-view.html">
+
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../components/paper-tabs/paper-tabs.html">
 
 <script src="../components/jquery/dist/jquery.min.js"></script>
 <!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
@@ -19,10 +24,7 @@
 <polymer-element name="get-plans-page">
   <template>
     <style>
-      .json{
-        white-space: pre;
-        font-family: monospace;
-      }
+
       paper-spinner.blue::shadow .circle {
         border-color: #4285f4;
       }
@@ -38,14 +40,74 @@
       paper-spinner.green::shadow .circle {
         border-color: #0f9d58;
       }
+      
+    paper-tabs, core-toolbar {
+      background-color: #2196F3;
+      color: #fff;
+      box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
+    }
+/*
+    paper-tabs a,
+    paper-tabs a:link,
+    paper-tabs a:visited,
+    paper-tabs a:hover,
+    paper-tabs a:active{
+      color:inherit;
+      text-decoration: inherit;
+      padding: inherit;
+      margin: inherit;
+    }
+ 
+*/
+    core-toolbar paper-tabs {
+      box-shadow: none;
+    }
+/*
+    paper-tabs::shadow #selectionBar {
+      background-color: #FF9800;
+    }
+    
+*/
+      .scroll{
+/*        overflow: auto;*/
+      }
+      .header, .scroll{
+        height: 100%;
+      }
+      .space-div{
+        margin:20px
+      }
     </style>
     <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
     <main-layout selected="get-plans">
       <div class="title">Get Plans</div>
-      
-<!--      <core-ajax auto url="//gdata.youtube.com/feeds/api/videos/" params='{"alt":"json", "q":"game"}' handleAs="json" on-core-response="{{handleResponse}}"></core-ajax>
--->
-      
+      <div class="header">
+          <div class="bottom fit" horizontal layout>
+    
+            <paper-tabs selected="{{tabSelected}}" valueattr="name" flex>
+
+              <paper-tab name="compact-view" on-tap="{{compactButHandler}}">COMPACT</paper-tab>
+              <paper-tab name="full-detail-view" on-tap="{{fullButHandler}}">FULL DETAIL</paper-tab>
+              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>
+
+            </paper-tabs>
+
+        </div>
+      </div>
+
+<!--      <div class="header">-->
+        <div class="scroll">
+          <div horizontal center-justified layout hidden?="{{loading_layout}}">
+            <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
+          </div>
+          <div>
+            <compact-view id="compact_view" data="{{response.data.plans}}"></compact-view>
+            <full-detail-view id="full_detail_view" data="{{response.data.plans}}"></full-detail-view>
+            <json-view id="json_view" data="{{response.data.plans}}" input="{{input}}"></json-view>
+          </div>
+          
+        </div>
+<!--      </div>-->
       <core-ajax 
         auto 
         url="http://127.0.0.1:6543/apis/processor" 
@@ -56,43 +118,16 @@
         body="{{json}}">
       </core-ajax>
       
-<!--      <core-xhr id="xhr"></core-xhr>-->
-
-      
+ 
 <!--
-      <polymer-jsonp 
-          auto 
-          url="http://127.0.0.1:6543/apis/subjects/math" 
-          on-polymer-response="{{handleResponse}}">
-      </polymer-jsonp>
--->
-<!--      http://127.0.0.1:6543/apis/subjects/math-->
-      
-<!--      <core-shared-lib on-core-shared-lib-load="{{handleResponse}}" url="http://127.0.0.1:6543/apis/subjects/math%%callback%%"></core-shared-lib>-->
-      
       <template repeat="{{response.data.subjects}}">
         <div>{{name}}</div>
       </template>
-<!--
-      {{response.type}} <br/>
-      {{response.message}}
 -->
-<!--
-      <template repeat="{{response.feed.entry}}">
-        <div>{{title.$t}}</div>
-      </template>
-      
--->
-      
-      <paper-spinner id="loading" class="blue" active></paper-spinner>
-      
-      <section class="json">
-        {{json}}
-      </section>
+
       
       
-      
-      <!--  Add subject dialog    -->
+      <!--  message from server dialog    -->
       <r2als-paper-action-dialog heading="{{messageHeading}}" backdrop layered="false" id="messageDialog">
         <template repeat="{{mb in messageBody}}">
           <p>
@@ -101,9 +136,8 @@
         </template>
         <paper-button dismissive autofocus class="colored">Close</paper-button>
       </r2als-paper-action-dialog>
-      <!--  Add subject dialog    -->  
+      <!--  message from server dialog     -->  
     
-      
     </main-layout>
   </template>
 

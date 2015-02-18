@@ -18,8 +18,9 @@ E-mail: mildronize@gmail.com
 
     <link rel="import" href="components/polymer/polymer.html">
     <link rel="import" href="components/app-router/app-router.html">
-    
+    <link rel="import" href="components/core-animated-pages/core-animated-pages.html">
     <link rel="import" href="components/core-localstorage/core-localstorage.html">
+    
     
     
       
@@ -39,13 +40,13 @@ E-mail: mildronize@gmail.com
     </style>
   </head>
     <body unresolved>
-        <!-- 4. Declare the element by its tag. -->
+        <!-- 4. Declare the element by it s tag. -->
 <!--      todo:: Split model out of view-->
       
       <polymer-element name="main-app" attributes="storageId">
         <template>
           
-          <app-router on-state-change="{{stateChange}}">
+          <app-router on-state-change="{{stateChange}}" core-animated-pages transitions="hero-transition cross-fade">
             <app-route path="/" import="pages/home-page.html"></app-route>
             <app-route path="/demo/:pathArg1" import="pages/demo-page.html"></app-route>
             <app-route path="/notes" import="pages/notes-page.html"></app-route>
@@ -59,10 +60,10 @@ E-mail: mildronize@gmail.com
       </polymer-element>
       <!--      Best practice MVC https://github.com/polymer/todomvc-->
       <!--     Initialize localstorage  -->
-      <core-localstorage id="storage" name="r2als-app"></core-localstorage>
+<!--      <core-localstorage id="storage" name="r2als-app"></core-localstorage>-->
       <main-app id="globals" storageId="storage"></main-app>
       <script>
-        console.log(">>> "+document.querySelector('main-app'));
+        console.log(document.querySelector('main-app'));
       </script>
     </body>
 </html>

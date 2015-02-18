@@ -6,15 +6,8 @@
 <link rel="import" href="../components/core-menu/core-submenu.html">
 <link rel="import" href="../components/font-roboto/roboto.html">
 
-<link rel="import" href="../components/paper-fab/paper-fab.html">
-
 <!--import Core Icons-->
 <link rel="import" href="../components/core-icons/social-icons.html">
-<!--
-
-<link rel="import" href="../components/paper-item/paper-item.html">
--->
-<!--<link rel="import" href="../components/core-menu/core-menu.html">-->
 
 <polymer-element name="main-layout" attributes="selected" noscript>
 
@@ -41,9 +34,9 @@
       </core-header-panel>
       <div tool>
         <content select=".title"></content>
-        
       </div>
-      <div class="content">
+      <content select=".header"></content>
+      <div class="content" cross-fade>
         <content></content>
       </div>
   </core-scaffold>

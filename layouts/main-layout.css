@@ -1,8 +1,12 @@
+html{
+  height: 100%;
+}
 body {
   font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
   font-size: 14px;
   margin: 0;
   padding: 24px;
+  height: 100%;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
   -webkit-touch-callout: none;
 }
@@ -11,6 +15,14 @@ body {
 :host /deep/ core-header-panel[main] {
   background-color: #fff;
 }
+
+/*
+:host /deep/ core-header-panel /deep/ #mainContainer {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+*/
+
 .content {
   padding: 20px;
 }

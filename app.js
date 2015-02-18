@@ -12,9 +12,10 @@
 //  - array-of-semester
 //  - array-of-subject
   models.type = "array-of-semester";
+  models.is_testing = true;
   models.semesters = [];
   function validateData(){
-    console.log("validateData");
+//    console.log("validateData");
   }
   function capitaliseFirstLetter(string){
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -181,13 +182,42 @@
   Polymer('get-plans-page', {
     created: function() { 
       validateData();
+      this.tabSelected = "full-detail-view";
+      this.loading_layout = false;
     },
     ready: function () {
 //      this.models = models;
-      this.json = JSON.stringify(models, null, 4);
+        this.json = JSON.stringify(models, null, 4);
+        this.input = models;
+      
+        this.$.compact_view.hidden = true;
+        this.$.full_detail_view.hidden = false;
+        this.$.json_view.hidden = true;
+        console.log(this.pathArg1);
     },
-    sendData: function(){
-    
+    attached: function () { 
+      if(this.pathArg1 == "" )
+        this.pathArg1 = 
+      console.log(this.pathArg1);
+    },
+    compactButHandler: function(event,detail,sender){
+      console.log("compactButHandler");
+      this.$.compact_view.hidden = false;
+      this.$.full_detail_view.hidden = true;
+      this.$.json_view.hidden = true;
+      console.log(this.pathArg1);
+    },
+    fullButHandler: function(event,detail,sender){
+      console.log("fullButHandler");
+      this.$.compact_view.hidden = true;
+      this.$.full_detail_view.hidden = false;
+      this.$.json_view.hidden = true;
+    },
+    jsonButHandler: function(event,detail,sender){
+      console.log("jsonButHandler");
+      this.$.compact_view.hidden = true;
+      this.$.full_detail_view.hidden = true;
+      this.$.json_view.hidden = false;
     },
     handleError: function(e){
         var xhr = e.detail.xhr;
@@ -200,9 +230,10 @@
         console.log(e);
         console.error(this.messageBody[1] + this.messageBody[2]);
         this.$.loading.active = false;
+        this.loading_layout = true;
     },
     handleResponse: function(e){
-      console.log(e);
+//      console.log(e);
       if(e.detail.xhr.status != 0){
         this.response = e.detail.response;
         if( this.response.type != "success"){
@@ -219,6 +250,7 @@
         console.error("The service is unavailable");
       }
       this.$.loading.active = false;
+      this.loading_layout = true;
     }
     
     

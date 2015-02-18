@@ -1,0 +1,80 @@
+
+<polymer-element name="full-detail-view" attributes="data" >
+  <template>
+    <style>
+        #wrapper{
+          height: 100%;
+          overflow:hidden;
+        }
+        #paper {
+/*            position:absolute; top: 60px; left:0px; right:0px; bottom:0px;*/
+            width: 100%;
+            height: 100%;
+            border: 1px solid #eee;
+            overflow-x:auto;
+        }
+        /*.block-pointer-events {
+            pointer-events: none
+        }*/
+        .link-tools .tool-remove { display: none }
+
+      
+    </style>
+    </style>
+    <link rel="stylesheet" href="../../css/main.css" shim-shadowdom>
+    <link rel="stylesheet" href="../../external_components/joint.min.css" shim-shadowdom>
+    
+    <div id="paper"></div>
+      
+    
+  </template>
+  <script src="../../external_components/joint.min.js"></script>
+  <script src="full-detail-view.js"></script>
+  <script>
+    
+    Polymer({
+      attached: function(){
+        this.graph = new joint.dia.Graph;
+        this.paper = new joint.dia.Paper({
+            el: this.$.paper,
+            width: 1920,
+            height: 800,
+            gridSize: 1,
+            perpendicularLinks: true,
+            model: this.graph,
+            linkView: joint.dia.LinkView.extend({
+            pointerdblclick: function(evt, x, y) {
+                if (V(evt.target).hasClass('connection') || V(evt.target).hasClass('connection-wrap')) {
+                this.addVertex({ x: x, y: y });
+                }
+            }
+            }),
+            interactive: function(cellView) {
+            if (cellView.model instanceof joint.dia.Link) {
+                    // Disable the default vertex add functionality on pointerdown.
+                // return { vertexAdd: false };
+            }
+            return true;
+            }
+
+        });
+        this.paper.scale(0.7, 0.7);
+        
+      },
+      dataChanged: function(){
+        this.graph.clear();    
+//        this.graph.fromJSON(this.data[0]);
+        var tmp_data = this.data[0];
+        exportJointJS = new ExportJointJS(tmp_data);
+
+        this.graph.addCells(exportJointJS.getCells());
+
+      }
+      
+
+    });
+  </script>
+  
+</polymer-element>
+
+

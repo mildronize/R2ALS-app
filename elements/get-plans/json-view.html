@@ -1,0 +1,40 @@
+
+
+<polymer-element name="json-view" attributes="data input" >
+  <template>
+    <style>
+      .json{
+        white-space: pre;
+        font-family: monospace;
+      }
+    </style>
+    <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
+    <div horizontal layout>
+      <div flex>
+        <h2>Input</h2>
+        <section class="json">
+          {{json_input}}
+        </section>
+      </div>
+      <div flex>
+        <h2>Output</h2>
+        <section class="json">
+          {{json_output}}
+        </section>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      dataChanged: function(){
+        this.json_output = JSON.stringify(this.data, null, 4);
+      },
+      inputChanged: function(){
+        this.json_input = JSON.stringify(this.input, null, 4);
+      }
+
+    });
+  </script>
+  
+</polymer-element>
