@@ -14,17 +14,16 @@ function ExportJointJS (data) {
 	this.last_year = data.last_year;
 	this.last_semester = data.last_semester;
 
-	this.initialZeroList = function(num_year, num_semester){
-		lists = []
-		num = num_year * num_semester;
-		for( var i = 0; i < num;i++)
+	this.initialZeroList = function(last_semester_id_plan){
+		lists = [];
+		last_semester_id_plan += 1;
+		for( var i = 0; i < last_semester_id_plan;i++)
             lists.push(0);
         return lists;
 	}
 		
-    this.list_num_subject = this.initialZeroList(data.num_year, data.num_semester);
+    this.list_num_subject = this.initialZeroList(data.last_semester_id_plan);
 
-	
 	
 	this.addList_num_subject = function(index, hasPrerequisite, offset){
         this.list_num_subject[index] += this.height
@@ -57,8 +56,33 @@ function ExportJointJS (data) {
 		}
 	}
 	
+	this.createSemesterHeader = function(semesterIndex, year, semester, total_credit){
+        coordinate = this.semesterToCoordinate(semesterIndex)
+        x = coordinate.x
+        y = coordinate.y
+        semester_id = 'semester-label-'+year+'-'+semester;
+        name = year+' / ' + semester + '('+total_credit+')';
+		this.addList_num_subject(semesterIndex, true, 0);
+        return new joint.shapes.basic.Rect({
+            "id": semester_id,
+            "type": "basic.Rect",
+            "attrs": { "text": {
+                         "text": name,
+                         "font-size": 20,
+                         'font-weight': 'bold'
+                        },
+                        "rect" : {
+                         "stroke-width": 1
+                        }
+                     },
+            "position":{"x": x,"y": y},
+            "size":{"width": this.width,"height":this.height},
+            "angle": 0,
+            "z": 1
+        });
+	}
+	
     this.createSubjectRect = function(subjectObj){
-		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		var semesterIndex = subjectObj.semesterIndex;
 
 		var subjec_id = subjectObj.id;
@@ -127,6 +151,14 @@ function ExportJointJS (data) {
 	
 	this.getCells = function(){
         lists = [];
+		//  Add Semester Header item
+		for(var i = 0; i < this.data.semesters.length;i++){
+			var semester = this.data.semesters[i];
+			lists.push(this.createSemesterHeader(i, semester.year, 
+												 semester.semester, 
+												 this.data.total_credits[i]));
+		}
+		//  Add Subject item
         for(var i = 0; i < this.data.semesters.length;i++){
 			var subjects = this.data.semesters[i].subjects;
 			for(var j=0;j < subjects.length; j++){
@@ -135,6 +167,7 @@ function ExportJointJS (data) {
 //				console.log(this.createSubjectRect(subjects[j]));
 			}
 		}
+		// Link item
 		for(var i = 0; i < this.data.links.length;i++){
 			lists.push(this.createLink(this.data.links[i]));
 		}
