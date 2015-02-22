@@ -33,11 +33,11 @@
   <script>
     
     Polymer({
-      attached: function(){
+      domReady: function(){
         this.graph = new joint.dia.Graph;
         this.paper = new joint.dia.Paper({
             el: this.$.paper,
-            width: 1920,
+            width: 2545,
             height: 800,
             gridSize: 1,
             perpendicularLinks: true,
@@ -59,6 +59,7 @@
 
         });
         this.paper.scale(0.7, 0.7);
+//        this.paper.width = 500;
         
       },
       dataChanged: function(){

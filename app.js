@@ -183,22 +183,28 @@
     created: function() { 
       validateData();
       this.tabSelected = "full-detail-view";
+//      this.tabSelected = "compact-view";
       this.loading_layout = false;
     },
     ready: function () {
 //      this.models = models;
         this.json = JSON.stringify(models, null, 4);
         this.input = models;
-      
-        this.$.compact_view.hidden = true;
-        this.$.full_detail_view.hidden = false;
-        this.$.json_view.hidden = true;
+//        this.$.compact_view.hidden = false;
+//        this.$.full_detail_view.hidden = false;
+//        this.$.json_view.hidden = false;
+
         console.log(this.pathArg1);
     },
     attached: function () { 
       if(this.pathArg1 == "" )
-        this.pathArg1 = 
       console.log(this.pathArg1);
+
+    },
+    domReady: function (){
+      this.$.compact_view.hidden = true;
+      this.$.full_detail_view.hidden = false;
+      this.$.json_view.hidden = true;
     },
     compactButHandler: function(event,detail,sender){
       console.log("compactButHandler");

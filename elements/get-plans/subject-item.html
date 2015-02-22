@@ -1,0 +1,72 @@
+<!--<link rel="import" href="../components/paper-item/paper-item.html">-->
+<link rel="import" href="../../components/core-item/core-item.html">
+<link rel="import" href="../../components/core-icon-button/core-icon-button.html">
+
+
+<polymer-element name="subject-item" attributes="name grade tags item">
+  <template>
+    <link rel="stylesheet" href="../../css/grade.css" shim-shadowdom>
+    <style>
+      core-item {
+        padding: 0px 5px;
+      }
+
+      core-item.big {
+        font-size: 24px;
+      }
+
+      core-item.small {
+        font-size: 12px;
+      }
+
+      core-item.subject-item {
+        height: 50px;
+        background-color: #FAFAFA;
+        border-bottom: 1px solid #F5F5F5;
+        font-size: 1.125em;
+      }
+      core-item.subject-item:hover,
+      core-item.subject-item:focus {
+        background-color: #F5F5F5;
+/*        color: #222;*/
+      }
+
+      core-item.subject-item .name {
+        font-size: 1.05em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;
+      }
+
+      core-item.subject-item .tags {
+        font-size: 10px;
+        color: #757575;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+        overflow: hidden;
+      }
+  </style>
+  <core-item class="subject-item">
+    <div class="grade grade-circle grade-space">{{grade}}</div>
+    <div flex>
+      <div class="name">{{name}}</div>
+      <div class="tags">{{tags}}</div>
+    </div>
+<!--     on-tap={{destroyItem}}-->
+  </core-item>
+    
+  </template>
+  <script>
+    Polymer({
+//        name: '',
+//        grade: '',
+//        tags: 'calculate, lecture',
+//        destroyItem: function (){
+//          this.fire('destroy-item', this.item);
+//        }
+ 
+    });
+  </script>
+</polymer-element>

@@ -87,11 +87,11 @@ function ExportJointJS (data) {
 
 		var subjec_id = subjectObj.id;
 		var name = subjectObj.name;
-		if('grade' in data)
+		if('grade' in subjectObj){
 		  name += ' ('+subjectObj.grade+')';
-		else
+        }else {
 		  name += ' ('+subjectObj.credit+')';
-
+        }
 		coordinate = this.semesterToCoordinate(semesterIndex)
 
 		this.addList_num_subject(semesterIndex, subjectObj.hasPrerequisite, 0);

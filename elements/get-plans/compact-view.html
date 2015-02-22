@@ -1,15 +1,60 @@
+<link rel="import" href="../../components/paper-shadow/paper-shadow.html">
+<link rel="import" href="subject-item.html">
 <polymer-element name="compact-view" attributes="data" >
   <template>
     <style>
+      .year-item{
+        padding: 0 5px;
+      }
+      .space{
+        margin: 5px 10px;
+      }
+      
     </style>
-    <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
+    <link rel="stylesheet" href="../../css/main.css" shim-shadowdom>
 <!--    {{json}}-->
+	  
+	<template repeat="{{year_item,year_itemIndex  in display_data}}">
+      <paper-shadow class="year-item">
+        <h3>Year {{year_itemIndex + 1}}</h3>
+        <div horizontal layout>
+          <template repeat="{{semester_item in year_item}}">
+            
+            <div flex class="space">
+              <h4>Semester {{semester_item.semester}}</h4>
+              <template repeat="{{subject in semester_item.subjects}}">
+                <subject-item name="{{subject.name}}" grade="{{subject.grade}}"></subject-item>    
+              </template>
+<!--              Year {{semester_item.year}} , Semester {{semester_item.semester}}-->
+            
+            </div>
+          </template>
+        </div>
+      </paper-shadow>
+ 	</template>
   </template>
+  
   <script>
     Polymer({
-//      dataChanged: function(){
+      dataChanged: function(){
 //        this.json = JSON.stringify(this.data, null, 4);
-//      }
+        this.display_data = this.data[0];
+        var data_item = this.data[0];
+        this.display_data = [];
+        var year_index=0;
+        this.display_data.push([]);
+        for(var i=0;i< data_item.semesters.length;i++){
+          if(year_index + 1 == data_item.semesters[i].year){
+            this.display_data[year_index].push(data_item.semesters[i])
+          }
+          if (this.display_data[year_index].length == data_item.num_semester){
+            year_index ++;
+            this.display_data.push([]);
+          }
+        }
+          
+		  
+      }
 
     });
   </script>

@@ -101,9 +101,9 @@
             <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
           </div>
           <div>
-            <compact-view id="compact_view" data="{{response.data.plans}}"></compact-view>
-            <full-detail-view id="full_detail_view" data="{{response.data.plans}}"></full-detail-view>
-            <json-view id="json_view" data="{{response.data.plans}}" input="{{input}}"></json-view>
+            <span id="compact_view"><compact-view data="{{response.data.plans}}"></compact-view></span>
+            <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{response.data.plans}}"></full-detail-view></span>
+            <span id="json_view"><json-view id="json_view" data="{{response.data.plans}}" input="{{input}}"></json-view></span>
           </div>
           
         </div>
