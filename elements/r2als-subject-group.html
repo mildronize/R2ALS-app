@@ -19,9 +19,9 @@
     <section>
       <h4>Year {{subjectInSemester.year}} Semester {{subjectInSemester.semester}}</h4>
         <div flex>
-          <paper-shadow on-destroy-item={{destroyItemAction}}>
+          <paper-shadow on-destroy-item={{destroyItemAction}} on-edit-item="{{EditItemAction}}">
             <template repeat="{{subject in subjectInSemester.subjects}}" > 
-              <r2als-subject name="{{subject.name}}" grade="{{subject.grade}}" item="{{}}"></r2als-subject> 
+              <r2als-subject name="{{subject.name}}" grade="{{subject.grade}}" item="{{}}" gradeOption="{{subject.gradeOption}}" subject_id="{{subject.id}}"></r2als-subject> 
             </template> 
            </paper-shadow>
         </div>
@@ -48,6 +48,11 @@
           }else{
             console.error("Not found subject object: ");
           }
+        },
+                
+        EditItemAction: function(e, detail) {
+//          console.log(detail);
+          this.fire('edit-item', detail);
         }
         
       });

@@ -1,6 +1,6 @@
 <link rel="import" href="../../components/paper-shadow/paper-shadow.html">
 <link rel="import" href="subject-item.html">
-<polymer-element name="compact-view" attributes="data" >
+<polymer-element name="compact-view" attributes="data refresh" >
   <template>
     <style>
       .year-item{
@@ -16,7 +16,7 @@
 	  
 	<template repeat="{{year_item,year_itemIndex  in display_data}}">
       <paper-shadow class="year-item">
-        <h3>Year {{year_itemIndex + 1}}</h3>
+        <h3 class="space">Year {{year_itemIndex + 1}}</h3>
         <div horizontal layout>
           <template repeat="{{semester_item in year_item}}">
             
@@ -38,8 +38,11 @@
     Polymer({
       dataChanged: function(){
 //        this.json = JSON.stringify(this.data, null, 4);
-        this.display_data = this.data[0];
-        var data_item = this.data[0];
+        this.generateView();
+      },
+      generateView: function(){
+        this.display_data = this.data;
+        var data_item = this.data;
         this.display_data = [];
         var year_index=0;
         this.display_data.push([]);
@@ -52,8 +55,6 @@
             this.display_data.push([]);
           }
         }
-          
-		  
       }
 
     });

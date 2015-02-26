@@ -23,9 +23,10 @@
           <paper-input-decorator id="paper-input-name" label="Enter your name" floatingLabel error="The name is required!" autoValidate>
             <input is="core-input" value="{{name}}" id="name" required >
           </paper-input-decorator>
+          <core-a11y-keys id="a11y" keys="enter" on-keys-pressed="{{onEnter}}"></core-a11y-keys>
         </section>
       
-      <r2als-anchor-button page="profile">Next</r2als-anchor-button>
+      <r2als-anchor-button id="anchor" page="profile">Next</r2als-anchor-button>
     
       
     </main-layout>

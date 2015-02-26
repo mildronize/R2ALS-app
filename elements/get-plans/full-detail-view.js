@@ -86,7 +86,7 @@ function ExportJointJS (data) {
 		var semesterIndex = subjectObj.semesterIndex;
 
 		var subjec_id = subjectObj.id;
-		var name = subjectObj.name;
+		var name = subjectObj.short_name;
 		if('grade' in subjectObj){
 		  name += ' ('+subjectObj.grade+')';
         }else {
@@ -135,7 +135,7 @@ function ExportJointJS (data) {
         link_id = 'link' + obj.source + '-'+obj.target;
         source = obj.source
         target = obj.target
-        return {
+        template =  {
             "id": link_id,
             "type": "link",
             "source": { "id": source},
@@ -147,6 +147,20 @@ function ExportJointJS (data) {
                 ".marker-source": { "d": "M 10 0 L 0 5 L 10 10 z" }
             }
         }
+        if(obj.type == "passed_prerequisite"){
+          template.attrs['.connection'] = {};
+          template.attrs['.connection']['stroke-width'] = 3;
+        }
+        if(obj.type == "corequisite"){
+          template.attrs['.connection'] = {};
+          template.attrs['.connection']['stroke-dasharray'] = '5 4';
+        }
+        if(obj.type == "cocurrent"){
+          template.attrs['.marker-target'] = {};
+          template.attrs['.marker-target']['d'] = 'M 10 0 L 0 5 L 10 10 z';
+        }
+//        console.log(template);
+        return template
 	}
 	
 	this.getCells = function(){

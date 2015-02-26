@@ -23,6 +23,8 @@
 
 <polymer-element name="get-plans-page">
   <template>
+<!--        <link rel="stylesheet" href="../../external_components/joint.min.css" shim-shadowdom>-->
+
     <style>
 
       paper-spinner.blue::shadow .circle {
@@ -88,11 +90,23 @@
 
               <paper-tab name="compact-view" on-tap="{{compactButHandler}}">COMPACT</paper-tab>
               <paper-tab name="full-detail-view" on-tap="{{fullButHandler}}">FULL DETAIL</paper-tab>
-              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>
+<!--              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>-->
 
             </paper-tabs>
 
         </div>
+        <section>
+          <paper-shadow>
+            <div horizontal center-justified layout hidden?="{{!loading_layout}}">
+              <div vertical layout >
+                <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
+      <!--            <p><paper-button raised on-tap="{{getNextSolution}}">No</paper-button> <paper-button raised class="colored">Yes</paper-button></p>-->
+                    <p><paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button><paper-button raised on-tap="{{refreshSolution}}">Refresh</paper-button><paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
+              </div>
+            </div>
+          </paper-shadow>
+        </section>
+        
       </div>
 
 <!--      <div class="header">-->
@@ -101,9 +115,9 @@
             <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
           </div>
           <div>
-            <span id="compact_view"><compact-view data="{{response.data.plans}}"></compact-view></span>
-            <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{response.data.plans}}"></full-detail-view></span>
-            <span id="json_view"><json-view id="json_view" data="{{response.data.plans}}" input="{{input}}"></json-view></span>
+            <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
+            <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
+<!--            <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>-->
           </div>
           
         </div>

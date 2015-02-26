@@ -54,7 +54,7 @@
       <div class="title">Study Result</div>
       <h3>Step 3: Add your subjects and grades</h3>
       
-      <section on-change-item="{{changeItemAction}}">
+      <section on-change-item="{{changeItemAction}}" on-edit-item="{{editItemAction}}">
         <template repeat="{{subjectInSemester in subjectInSemesters}}">
           <r2als-subject-group subjectInSemester="{{subjectInSemester}}" items={{}}></r2als-subject-group>
         </template>
@@ -73,8 +73,7 @@
         <p>
           <r2als-add-subject subjectItem={{tempSubjectData}} url="http://127.0.0.1:6543/apis/subject-groups/first-group/search/"></r2als-add-subject>
         </p>
-        
-        <paper-button closeDisabled autofocus class="colored" on-tap="{{buttonAdd}}">Add</paper-button>
+        <paper-button closeDisabled autofocus class="colored" on-tap="{{buttonAdd}}">Save</paper-button>
         <paper-button dismissive>Cancel</paper-button>
       </r2als-paper-action-dialog>
       <!--  Add subject dialog    -->      

@@ -1,5 +1,7 @@
+<link rel="import" href="../../components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../../components/paper-button/paper-button.html">
 
-<polymer-element name="full-detail-view" attributes="data" >
+<polymer-element name="full-detail-view" attributes="data refresh" >
   <template>
     <style>
         #wrapper{
@@ -10,21 +12,42 @@
 /*            position:absolute; top: 60px; left:0px; right:0px; bottom:0px;*/
             width: 100%;
             height: 100%;
-            border: 1px solid #eee;
+/*            border: 1px solid #eee;*/
             overflow-x:auto;
+        }
+        paper-shadow{
+            padding: 10px;
+            margin: 10px;
         }
         /*.block-pointer-events {
             pointer-events: none
         }*/
         .link-tools .tool-remove { display: none }
-
+        paper-button{
+          margin: 0px;
+          padding: 0px;
+        }
       
     </style>
     </style>
     <link rel="stylesheet" href="../../css/main.css" shim-shadowdom>
-    <link rel="stylesheet" href="../../external_components/joint.min.css" shim-shadowdom>
-    
-    <div id="paper"></div>
+    <link rel="stylesheet" href="../../external_components/joint.css" shim-shadowdom>
+<!--
+    <section>
+      <paper-shadow>
+        <div horizontal center-justified layout>
+          <div vertical layout >
+            <h3 style="margin: 5px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solutions_length}} ) </h3>
+            <p><paper-button raised on-tap="{{getNextSolution}}">No</paper-button> <paper-button raised class="colored">Yes</paper-button></p>
+                <p><paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button> <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
+          </div>
+        </div>
+      </paper-shadow>
+    </section>
+-->
+    <paper-shadow>
+      <div id="paper"></div>
+    </paper-shadow>
       
     
   </template>
@@ -33,6 +56,11 @@
   <script>
     
     Polymer({
+      created: function(){
+        this.solution_id = 0;
+        this.display_solution_id = 1;
+        this.solutions_length = 1;
+      },
       domReady: function(){
         this.graph = new joint.dia.Graph;
         this.paper = new joint.dia.Paper({
@@ -59,17 +87,40 @@
 
         });
         this.paper.scale(0.7, 0.7);
-//        this.paper.width = 500;
         
       },
       dataChanged: function(){
+//        this.solution_id = 0;
+//        this.display_solution_id = 1;
+//        this.solutions_length = this.data.length;
+        this.getSolution();
+      },
+      refreshChanged: function(){
+        this.getSolution();
+      },
+      getSolution: function(){
         this.graph.clear();    
-//        this.graph.fromJSON(this.data[0]);
-        var tmp_data = this.data[0];
-        exportJointJS = new ExportJointJS(tmp_data);
-
+        // this.graph.fromJSON(this.data[0]);
+//        var tmp_data = this.data[this.solution_id];
+        exportJointJS = new ExportJointJS(this.data);
         this.graph.addCells(exportJointJS.getCells());
-
+        //          if (this.solution_id + 1 <= this.data.length)
+      },
+      getNextSolution: function(){
+        if(this.solution_id < this.data.length){
+          this.solution_id ++;
+          this.display_solution_id = this.solution_id + 1;
+          console.log(this.solution_id);
+          this.getSolution();
+        }
+      },
+      getPreviousSolution: function(){
+        if(this.solution_id > 0){
+          this.solution_id --;
+          this.display_solution_id = this.solution_id + 1;
+          console.log(this.solution_id);
+          this.getSolution();
+        }
       }
       
 

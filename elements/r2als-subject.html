@@ -28,6 +28,7 @@
       core-item.subject-item:hover,
       core-item.subject-item:focus {
         background-color: #F5F5F5;
+        cursor:pointer;
 /*        color: #222;*/
       }
 
@@ -48,7 +49,7 @@
         overflow: hidden;
       }
   </style>
-  <core-item class="subject-item">
+  <core-item class="subject-item" on-tap={{editItem}}>
     <div class="grade grade-circle grade-space">{{grade}}</div>
     <div flex>
       <div class="name">{{name}}</div>
@@ -56,7 +57,7 @@
     </div>
     <core-icon-button icon="delete" on-tap={{destroyItem}}></core-icon-button>
   </core-item>
-    
+
   </template>
   <script>
     Polymer('r2als-subject', {
@@ -65,8 +66,19 @@
 //        tags: 'calculate, lecture',
         destroyItem: function (){
           this.fire('destroy-item', this.item);
-        }
- 
+        },
+        editItem: function (){
+          this.fire('edit-item', this.item);
+        },
+//        editSubject: function (){
+//          this.tempSubjectData = {};
+//          this.tempSubjectData.gradeOption = this.gradeOption;
+//          this.tempSubjectData.name = this.name;
+////          this.tempSubjectData.tags = this.tags;
+//          this.tempSubjectData.grade = this.grade;
+//          this.tempSubjectData.id = this.id;
+//          this.$.EditSubjectItem.toggle();
+//        }
     });
   </script>
 </polymer-element>

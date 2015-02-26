@@ -42,7 +42,7 @@
           <paper-radio-button name="computer-control" label="Computer Control Engineering"></paper-radio-button>
           <paper-radio-button name="computer-system-design" label="Computer System Design Engineering"></paper-radio-button>
         </paper-radio-group>
-
+        <core-a11y-keys id="a11y" keys="enter" on-keys-pressed="{{onEnter}}"></core-a11y-keys>
       </section>
 
 <!--
@@ -51,7 +51,7 @@
       </section>
 -->
       
-      <r2als-anchor-button page="study-result">Next</r2als-anchor-button>
+      <r2als-anchor-button id="anchor" page="study-result">Next</r2als-anchor-button>
 
     </main-layout>
   </template>

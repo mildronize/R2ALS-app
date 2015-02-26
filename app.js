@@ -6,20 +6,59 @@
 //E-mail: mildronize@gmail.com
 //
 //  "study-result-page" Section
-  var models = {};
-  models.member = {};
-//  models type
-//  - array-of-semester
-//  - array-of-subject
-  models.type = "array-of-semester";
-  models.is_testing = true;
-  models.semesters = [];
-  function validateData(){
+var models;
+var prefix_link = "#/";
+  
+function initialModels(){
+	models = {};
+	models.member = {};
+	//  models type
+	//  - array-of-semester
+	//  - array-of-subject
+	models.type = "array-of-semester";
+	models.is_testing = true;
+	models.semesters = [];
+}
+  
+function isBrowserSupportStorage(){
+	  // Check browser support
+	if (typeof(Storage) != "undefined")return true;
+	else {
+		console.log("Sorry, your browser does not support Web Storage...");
+		return false;
+	}
+}
+  
+function initialLocalStorage(){
+	if (isBrowserSupportStorage()) {
+//		console.log(localStorage.getItem("models"));
+		if(localStorage.getItem("models") == null)
+			initialModels();
+	}
+}
+
+function updateLocalStorage(){
+	if (isBrowserSupportStorage()) {
+		localStorage.setItem("models", JSON.stringify(models));
+		console.log(JSON.parse(localStorage.getItem("models")));
+	}
+}
+
+function loadLocalStorage(){
+	if (isBrowserSupportStorage) {
+		if(localStorage.getItem("models") != null)
+			models = JSON.parse(localStorage.getItem("models"));
+	}
+}
+ 
+function validateData(){
 //    console.log("validateData");
-  }
-  function capitaliseFirstLetter(string){
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+}
+	
+function capitaliseFirstLetter(string){
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+	
   var n = 0;
 
   Polymer('main-app', {
@@ -29,11 +68,13 @@
       var current_url = document.URL.toString();
       var len = current_url.length - 2;
       var str_ck = current_url.substr(len);
-      if(str_ck != '#/' & str_ck.charAt(1) == '/' ){
-        location.href = "#/";
+      if(str_ck != "#/" & str_ck.charAt(1) == '/' ){
+        location.href = prefix_link;
       }
       console.log(str_ck);
       console.log(document.URL);
+      
+      initialLocalStorage();
     },
     stateChange: function (event) {
       //   console.log(document.querySelector('study-result-page'));
@@ -53,26 +94,39 @@
   
   Polymer('home-page', {
     created: function() { 
-      this.name = models.member.name;
+      loadLocalStorage();
+      console.log(models);
+      if('name' in models.member){
+        this.name = models.member.name;
+      }
     },
     nameChanged: function(oldValue, newValue) {
       models.member.name = this.name;
-      console.log(this.name);
+      updateLocalStorage();
+    },
+    onEnter: function(event){
+      location.href = prefix_link + this.$.anchor.getAttribute("page");
     }
   });
   
   Polymer('profile-page', {
     created: function() { 
-      this.subject_group = models.member.subject_group;
-      this.branch = models.member.branch;
+		loadLocalStorage();
+		this.subject_group = models.member.subject_group;
+		this.branch = models.member.branch;
     },
     subject_groupChanged: function(oldValue, newValue) {
-      models.member.subject_group = newValue;
-      console.log(newValue);
+		models.member.subject_group = newValue;
+		//      console.log(newValue);
+		updateLocalStorage();
     },
     branchChanged: function(oldValue, newValue) {
-      models.member.branch = newValue;
-      console.log(newValue);
+		models.member.branch = newValue;
+		//      console.log(newValue);
+		updateLocalStorage();
+    },
+    onEnter: function(event){
+      location.href = prefix_link + this.$.anchor.getAttribute("page");
     }
   });
     
@@ -80,6 +134,7 @@
     // initialize the element's model
  
     created: function() { 
+      loadLocalStorage();
       this.hideMessage = false;
       this.subjectInSemesters = models.semesters;
       this.changeData();
@@ -167,7 +222,7 @@
       }else {
         this.hideMessage = true;
       }
-      
+      updateLocalStorage();
     },
     changeItemAction: function(e, detail) {
       //      clear semester if it is null
@@ -175,6 +230,12 @@
         this.deleteSemester(detail.subjectInSemester);
       }
       this.changeData();
+    },
+    editItemAction:  function(e, detail) {
+//      console.log("555");
+      console.log(detail);
+//      this.tempSubjectData = detail.subject;
+//      this.$.addSubjectItem.toggle();
     }
     
   });
@@ -188,6 +249,7 @@
     },
     ready: function () {
 //      this.models = models;
+        loadLocalStorage();
         this.json = JSON.stringify(models, null, 4);
         this.input = models;
 //        this.$.compact_view.hidden = false;
@@ -237,16 +299,21 @@
         console.error(this.messageBody[1] + this.messageBody[2]);
         this.$.loading.active = false;
         this.loading_layout = true;
+//        console.log(models);
     },
     handleResponse: function(e){
 //      console.log(e);
       if(e.detail.xhr.status != 0){
         this.response = e.detail.response;
+        
         if( this.response.type != "success"){
           this.messageHeading = capitaliseFirstLetter(this.response.type);
           this.messageBody = [];
           this.messageBody[0] = this.response.message;
           this.$.messageDialog.toggle();
+        }
+        else{
+          this.responseReady();
         }
       }else {
         this.messageHeading = "Error";
@@ -257,6 +324,38 @@
       }
       this.$.loading.active = false;
       this.loading_layout = true;
+    },
+    responseReady: function(){
+//        this.current_plan = response.data.plans[this.solution_id];
+        this.solution_id = 0;
+        this.display_solution_id = 1;
+        this.refresh = true;
+        this.solution_length = this.response.data.plans.length;
+        this.updateSolution();
+    },
+    updateSolution: function(){
+        this.current_plan = this.response.data.plans[this.solution_id];
+    },
+    getNextSolution: function(){
+        if(this.solution_id < this.solution_length-1){
+          console.log(this.solution_id);
+          console.log(this.solution_length);
+          this.solution_id ++;
+          this.display_solution_id = this.solution_id + 1;
+          console.log(this.solution_id);
+          this.updateSolution();
+        }
+      },
+    getPreviousSolution: function(){
+        if(this.solution_id > 0){
+          this.solution_id --;
+          this.display_solution_id = this.solution_id + 1;
+//          console.log(this.solution_id);
+          this.updateSolution();
+        }
+      },
+    refreshSolution: function(){
+      this.refresh = !this.refresh;
     }
     
     
