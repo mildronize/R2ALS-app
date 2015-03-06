@@ -16,7 +16,7 @@ function initialModels(){
 	//  - array-of-semester
 	//  - array-of-subject
 	models.type = "array-of-semester";
-	models.is_testing = true;
+	models.is_testing = false;
 	models.semesters = [];
 }
   
