@@ -16,7 +16,7 @@ function initialModels(){
 	//  - array-of-semester
 	//  - array-of-subject
 	models.type = "array-of-semester";
-	models.is_testing = false;
+	models.is_testing = true;
 	models.semesters = [];
 }
   
@@ -240,10 +240,12 @@ function capitaliseFirstLetter(string){
     
   });
   
+  
+  
   Polymer('get-plans-page', {
     created: function() { 
       validateData();
-      this.tabSelected = "full-detail-view";
+      this.tabSelected = "cozy-view";
 //      this.tabSelected = "compact-view";
       this.loading_layout = false;
     },
@@ -265,14 +267,16 @@ function capitaliseFirstLetter(string){
     },
     domReady: function (){
       this.$.compact_view.hidden = true;
-      this.$.full_detail_view.hidden = false;
+      this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
+      this.$.cozy_view.hidden = false; 
     },
     compactButHandler: function(event,detail,sender){
       console.log("compactButHandler");
       this.$.compact_view.hidden = false;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
+      this.$.cozy_view.hidden = true; 
       console.log(this.pathArg1);
     },
     fullButHandler: function(event,detail,sender){
@@ -280,12 +284,21 @@ function capitaliseFirstLetter(string){
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = false;
       this.$.json_view.hidden = true;
+      this.$.cozy_view.hidden = true; 
     },
     jsonButHandler: function(event,detail,sender){
       console.log("jsonButHandler");
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = false;
+      this.$.cozy_view.hidden = true; 
+    },
+    cozyButHandler: function(event,detail,sender){
+      console.log("jsonButHandler");
+      this.$.compact_view.hidden = true;
+      this.$.full_detail_view.hidden = true;
+      this.$.json_view.hidden = true;
+      this.$.cozy_view.hidden = false; 
     },
     handleError: function(e){
         var xhr = e.detail.xhr;

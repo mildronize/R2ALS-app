@@ -102,26 +102,26 @@
         this.graph.clear();    
         // this.graph.fromJSON(this.data[0]);
 //        var tmp_data = this.data[this.solution_id];
-        exportJointJS = new ExportJointJS(this.data);
-        this.graph.addCells(exportJointJS.getCells());
+//        exportJointJS = new ExportJointJS(this.data);
+//        this.graph.addCells(exportJointJS.getCells());
         //          if (this.solution_id + 1 <= this.data.length)
       },
-      getNextSolution: function(){
-        if(this.solution_id < this.data.length){
-          this.solution_id ++;
-          this.display_solution_id = this.solution_id + 1;
-          console.log(this.solution_id);
-          this.getSolution();
-        }
-      },
-      getPreviousSolution: function(){
-        if(this.solution_id > 0){
-          this.solution_id --;
-          this.display_solution_id = this.solution_id + 1;
-          console.log(this.solution_id);
-          this.getSolution();
-        }
-      }
+//      getNextSolution: function(){
+//        if(this.solution_id < this.data.length){
+//          this.solution_id ++;
+//          this.display_solution_id = this.solution_id + 1;
+//          console.log(this.solution_id);
+//          this.getSolution();
+//        }
+//      },
+//      getPreviousSolution: function(){
+//        if(this.solution_id > 0){
+//          this.solution_id --;
+//          this.display_solution_id = this.solution_id + 1;
+//          console.log(this.solution_id);
+//          this.getSolution();
+//        }
+//      }
       
 
     });

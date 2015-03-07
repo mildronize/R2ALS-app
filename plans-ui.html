@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Title of the document</title>
+<!-- 1. Load platform support before any code that touches the DOM. -->
+<script src="components/webcomponentsjs/webcomponents.js"></script>
+<script src="components/jquery/dist/jquery.min.js"></script>
+<script src="components/jquery.transit/jquery.transit.js"></script>
+<link rel="import" href="components/polymer/polymer.html">
+<link rel="import" href="components/font-roboto/roboto.html">
+
+
+<style>
+body {
+  font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+  font-size: 14px;
+}
+.box-stack-list{
+/*  text-align:center;*/
+  position: relative; 
+/*  height: 168px;*/
+}
+.box-stack-list .box{
+  width:100px;
+  display:inline-block;
+  margin:2px;
+
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset, 0 1px 1px #DDD;
+  border-radius:2px;
+
+  color:#666;
+  vertical-align: top;
+/*  line-height: 230px;*/
+  font-size: 12px;
+}
+  
+.box-stack-list div[horizontal] {
+/*  background-color: yellow;*/
+}
+.box-stack-list div[vertical] {
+/*  background-color: red;*/
+  margin: 10px;
+}
+  
+.green{
+  background:radial-gradient(#77d19e,#46c17b);
+  height:30px;
+}
+.blue{
+  background:radial-gradient(#8dd2d9 , #58c0c7);
+  height:65px;
+}
+.orange{
+  background:radial-gradient(#FFCC80 , #FFA726); /* color in, color out */
+  height:50px;
+}
+
+
+</style>  
+</head>
+<body>
+  
+  <div class="box-stack-list">
+    <div class="box green" list-id="0">A</div>
+    <div class="box blue" list-id="0">B</div>
+    <div class="box green" list-id="1">C</div>
+    <div class="box blue" list-id="1">D</div>
+    <div class="box orange" list-id="2">E</div>
+    <div class="box blue" list-id="2">F</div>
+    <div class="box orange" list-id="2">G</div>
+    <div class="box orange" list-id="4">E</div>
+    <div class="box blue" list-id="2">F</div>
+    <div class="box orange" list-id="3">G</div>
+    <div class="box green" list-id="2">A</div>
+    <div class="box blue" list-id="4">B</div>
+    <div class="box green" list-id="1">A</div>
+    <div class="box blue" list-id="0">B</div>
+  </div>
+  
+</body>
+
+  <script>
+    function BoxStackList(box_container){
+//      this.box_container = box_container;
+      this.boxLists = [];
+      this.widthMargin = 20;
+      this.HeightMargin = 10;
+      this.width = 100;
+      
+      this.initialBoxList = function(boxLists, box_container, extendBoxList){
+        $( box_container.selector + " .box" ).each(function( index ) {
+          $( this ).css("position","absolute");
+          var list_id = parseInt($( this ).attr("list-id"));
+          console.log(index + ": " + list_id);
+//          console.log(index + " ? " + boxLists.length);
+          console.log($( this ).css("height"))
+          if(list_id >= boxLists.length | boxLists.length == 0){
+            boxLists = extendBoxList(boxLists, list_id+1);
+          }
+          boxLists[list_id].push($( this ));
+        });
+        return boxLists;
+      };
+
+      this.extendBoxList = function(boxLists, target_length){
+        for(var i = boxLists.length; i< target_length;i++){
+          console.log(i);
+          boxLists.push([]);
+        }
+        console.log("result " + boxLists.length);
+        return boxLists;
+      };
+      
+      
+      this.rearrangeBoxList = function(boxLists){
+//        console.log(boxLists);
+        var accumulatedWidth = 0;
+        var accumulatedHeight, last_height=0;
+        
+        for(var i=0;i < boxLists.length;i++){
+          if(i!=0)
+            accumulatedWidth += this.width + this.widthMargin;
+          var boxList = boxLists[i];
+          accumulatedHeight = 0;
+          for(var j=0;j < boxList.length; j++){
+            var str_tmp = boxList[j].css("height");
+            var height = parseInt(str_tmp.replace("px",""));
+            
+            if(j!=0){
+              accumulatedHeight += last_height + this.HeightMargin;
+            }
+            if (boxList[j].css("left") != accumulatedWidth | boxList[j].css("top") != accumulatedHeight){
+//              boxList[j].animate({ "left": accumulatedWidth+"px" },{
+//                queue: false,
+//                duration: 750
+//              });
+//              boxList[j].animate({ "top": accumulatedHeight+"px" },{
+//                queue: false,
+//                duration: 750
+//              });
+              boxList[j].transition({ "x": accumulatedWidth+"px" },{queue: false});
+              boxList[j].transition({ "y": accumulatedHeight+"px" },{queue: false});
+            }
+            last_height = height;
+            }
+        }
+//        console.log("rearrangeBoxList");
+      };
+      
+      this.autoFit = function(boxLists, list_id, isSwap){
+        var accumulatedHeight, last_height=0;
+        var accumulatedWidth = (this.width + this.widthMargin) * list_id;
+        var boxList = boxLists[list_id];
+        accumulatedHeight = 0;
+        for(var j=0;j < boxList.length; j++){
+          var str_tmp = boxList[j].css("height");
+          var height = parseInt(str_tmp.replace("px",""));
+
+          if(j!=0){
+            accumulatedHeight += last_height + this.HeightMargin;
+          }
+          if (boxList[j].css("left") != accumulatedWidth | boxList[j].css("top") != accumulatedHeight){
+//            boxList[j].animate({ "left": accumulatedWidth+"px" },{
+//              queue: false,
+//              duration: 750
+//            });
+//            boxList[j].animate({ "top": accumulatedHeight+"px" },{
+//              queue: false,
+//              duration: 750
+//            });
+            if (isSwap){
+              boxList[j].transition({ "y": accumulatedHeight+"px" },{queue: true});
+              boxList[j].transition({ "x": accumulatedWidth+"px" },{queue: true});
+            }else{
+              boxList[j].transition({ "x": accumulatedWidth+"px" },{queue: true});
+              boxList[j].transition({ "y": accumulatedHeight+"px" },{queue: true});
+            }
+          }
+          last_height = height;
+          }
+
+      }
+      
+      this.removeBox = function(box){
+        var box_id = box.index();
+        var list_id = box.attr("list-id");
+        for( var i =0;i< this.boxLists[list_id].length;i++){
+          if(this.boxLists[list_id][i].index() == box_id){
+            this.boxLists[list_id].splice(i, 1);
+//            this.rearrangeBoxList(this.boxLists, );
+            this.autoFit(this.boxLists, list_id, false);
+            return true;
+          }
+        }
+        console.error(box_id +" "+ list_id +" "+  this.boxLists[list_id].length);
+        return false;
+      }
+      
+      this.moveBox = function(box){
+          var box_id = box.index();
+          var isSwaping, old_list_id;
+          var list_id = box.attr("list-id");
+          console.log(this.boxLists);
+          if (this.removeBox(box)){
+              old_list_id = list_id;
+              list_id -= 1;
+              if (list_id < 0){
+                list_id = this.boxLists.length-1;
+              }
+              box.attr("list-id", list_id);
+              this.boxLists[list_id].push(box);
+              if(this.boxLists[old_list_id].length <= this.boxLists[list_id].length)
+                isSwaping = true;
+              else isSwaping = false;
+              this.autoFit(this.boxLists, list_id, isSwaping);
+              console.log(this.boxLists);
+          }
+          
+      };
+      
+      this.boxLists = this.initialBoxList(this.boxLists, box_container, this.extendBoxList);
+      this.rearrangeBoxList(this.boxLists);
+//      console.log(this.boxLists);
+    }
+
+    $(document).ready(function(){
+        var bsl = new BoxStackList($(".box-stack-list"));
+        $(".box-stack-list").delegate('.box', 'click', function () {
+//            $(this).hide();
+            bsl.moveBox($(this));
+        });
+    });
+  </script>
+</html>

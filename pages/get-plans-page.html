@@ -12,6 +12,7 @@
 <link rel="import" href="../elements/get-plans/full-detail-view.html">
 <link rel="import" href="../elements/get-plans/json-view.html">
 <link rel="import" href="../elements/get-plans/compact-view.html">
+<link rel="import" href="../elements/get-plans/cozy-view.html">
 
 <link rel="import" href="../components/core-ajax/core-ajax.html">
 <link rel="import" href="../components/paper-spinner/paper-spinner.html">
@@ -90,7 +91,8 @@
 
               <paper-tab name="compact-view" on-tap="{{compactButHandler}}">COMPACT</paper-tab>
               <paper-tab name="full-detail-view" on-tap="{{fullButHandler}}">FULL DETAIL</paper-tab>
-<!--              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>-->
+              <paper-tab name="cozy-view" on-tap="{{cozyButHandler}}">Cozy</paper-tab>
+              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>
 
             </paper-tabs>
 
@@ -117,7 +119,8 @@
           <div>
             <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
             <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
-<!--            <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>-->
+            <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}"></cozy-view></span>
+            <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>
           </div>
           
         </div>

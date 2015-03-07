@@ -1,0 +1,76 @@
+<script src="../../components/packery/dist/packery.pkgd.min.js"></script>
+
+<polymer-element name="cozy-view" attributes="data" >
+  <template>
+    <style>
+      .json{
+        white-space: pre;
+        font-family: monospace;
+      }
+      .box-container{
+        text-align:center;
+      }
+      .box-container .box{
+        width:100px;
+        height:100px;
+        display:inline-block;
+        margin:2px;
+
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset, 0 1px 1px #DDD;
+        border-radius:2px;
+
+        color:#666;
+        vertical-align: top;
+        line-height: 230px;
+        font-size: 12px;
+      }
+      .green{
+        background:radial-gradient(#77d19e,#46c17b);
+      }
+      .blue{
+        background:radial-gradient(#8dd2d9 , #58c0c7);
+      }
+
+    </style>
+    <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
+        
+<!--
+    <div class="box-container">
+      <div class="box green"></div>
+    </div>
+-->
+    
+    <div class="box-container">
+      
+      
+      
+      <div class="box green"></div>
+      <div class="box blue"></div>
+    </div>
+    
+    
+    
+<!--    <div class="json">{{json_output}}</div>-->
+    
+  </template>
+  <script>
+//    var $container = $('#container');
+//    // init
+//    $container.packery({
+//      itemSelector: '.item',
+//      gutter: 10
+//    });
+    Polymer({
+      domReady: function(){
+      },
+      dataChanged: function(){
+        this.json_output = JSON.stringify(this.data, null, 4);
+      },
+      inputChanged: function(){
+//        this.json_input = JSON.stringify(this.input, null, 4);
+      }
+
+    });
+  </script>
+  
+</polymer-element>
