@@ -18,7 +18,10 @@
 <link rel="import" href="../components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../components/paper-tabs/paper-tabs.html">
 
+<!--
 <script src="../components/jquery/dist/jquery.min.js"></script>
+<script src="../elements/get-plans/box-stack-list.js"></script>
+-->
 <!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
 
 
@@ -100,6 +103,7 @@
         <section>
           <paper-shadow>
             <div horizontal center-justified layout hidden?="{{!loading_layout}}">
+            <div horizontal center-justified layout hidden?="{{!loading_layout}}">
               <div vertical layout >
                 <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
       <!--            <p><paper-button raised on-tap="{{getNextSolution}}">No</paper-button> <paper-button raised class="colored">Yes</paper-button></p>-->
@@ -119,7 +123,7 @@
           <div>
             <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
             <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
-            <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}"></cozy-view></span>
+            <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}" polymerObj="{{cozy_view}}" refresh="{{refresh}}"></cozy-view></span>
             <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>
           </div>
           

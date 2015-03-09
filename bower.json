@@ -53,6 +53,8 @@
     "validity": "*",
     "chisele": "~0.0.5",
     "packery": "~1.3.2",
-    "jquery.transit": "~0.9.12"
+    "jquery.transit": "~0.9.12",
+    "jquery.responsiveiframe": "npr/responsiveiframe#master",
+    "vis": "~3.11.0"
   }
 }

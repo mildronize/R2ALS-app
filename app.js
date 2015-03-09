@@ -270,6 +270,8 @@ function capitaliseFirstLetter(string){
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
       this.$.cozy_view.hidden = false; 
+      
+      
     },
     compactButHandler: function(event,detail,sender){
       console.log("compactButHandler");
@@ -345,6 +347,10 @@ function capitaliseFirstLetter(string){
         this.refresh = true;
         this.solution_length = this.response.data.plans.length;
         this.updateSolution();
+//        this.initialCozyView();
+//        console.log(this.cozy_view.polymerObj);
+//        var bsl = new BoxStackList(this.cozy_view.polymerObj, "box-stack-list");
+        
     },
     updateSolution: function(){
         this.current_plan = this.response.data.plans[this.solution_id];

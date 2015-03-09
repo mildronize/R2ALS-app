@@ -1,73 +1,248 @@
-<script src="../../components/packery/dist/packery.pkgd.min.js"></script>
+<link rel="import" href="../../components/paper-shadow/paper-shadow.html">
+<script src="../../components/jquery/dist/jquery.min.js"></script>
+<script src="../../components/jquery.transit/jquery.transit.js"></script>
+<script src="../../components/vis/dist/vis.min.js"></script>
+<script src="box-stack-list-polymer.js"></script>
 
-<polymer-element name="cozy-view" attributes="data" >
+<link rel="import" href="../../elements/r2als-paper-action-dialog.html">
+<polymer-element name="cozy-view" attributes="data polymerObj refresh" >
   <template>
     <style>
       .json{
         white-space: pre;
         font-family: monospace;
       }
-      .box-container{
-        text-align:center;
+
+      #box-container{
+        display: block;
+        position: relative; 
+        height: 200px;
+        overflow-x:auto;
+        overflow-y:hidden;
       }
-      .box-container .box{
-        width:100px;
-        height:100px;
+
+      #box-stack-list{
+        position: relative; 
+      }
+      #box-stack-list .box{
+        cursor: pointer;
+        width:80px;
         display:inline-block;
         margin:2px;
 
         box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset, 0 1px 1px #DDD;
         border-radius:2px;
 
-        color:#666;
-        vertical-align: top;
-        line-height: 230px;
+/*        color:#333;*/
+        vertical-align: middle;
+      /*  line-height: 230px;*/
+        text-align: center;
         font-size: 12px;
+        height:auto;
       }
+/*
+      .header{
+        background:radial-gradient(#F5F5F5 , #E0E0E0);
+      }
+*/
+
       .green{
         background:radial-gradient(#77d19e,#46c17b);
+/*        height:30px;*/
+        color:#333;
       }
       .blue{
         background:radial-gradient(#8dd2d9 , #58c0c7);
+/*        height:40px;*/
+        color:#333;
+      }
+      .orange{
+        background:radial-gradient(#FFCC80 , #FFA726); /* color in, color out */
+/*        height:50px;*/
+        color:#333;
+      }
+      .grey{
+        background:radial-gradient(#F5F5F5 , #E0E0E0); /* color in, color out */
+        color:#333;
+      }
+      .header{
+        background:radial-gradient(#3F51B5 , #303F9F); /* color in, color out */
+/*        padding: 10px 2px;*/
+        color: #eee;
+        font-weight: bold;
       }
 
+      
     </style>
     <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
         
-<!--
-    <div class="box-container">
-      <div class="box green"></div>
-    </div>
--->
+      <div id="box-container">
+        <div id="box-stack-list"></div>
+      </div>
     
-    <div class="box-container">
-      
-      
-      
-      <div class="box green"></div>
-      <div class="box blue"></div>
-    </div>
-    
-    
-    
-<!--    <div class="json">{{json_output}}</div>-->
+      <!--  message from server dialog    -->
+      <r2als-paper-action-dialog heading="{{subjectName}}" backdrop layered="false" id="detailDialog">
+        <iframe src="graph.html"></iframe>
+        <div id="graph"></div>
+        <section class="json">
+          {{allData}}
+        </section>
+        <paper-button dismissive autofocus class="colored">Close</paper-button>
+      </r2als-paper-action-dialog>
+      <!--  message from server dialog     -->  
     
   </template>
   <script>
-//    var $container = $('#container');
-//    // init
-//    $container.packery({
-//      itemSelector: '.item',
-//      gutter: 10
-//    });
+
+    function randint(a,b){
+     return Math.floor((Math.random() * b) + a); 
+    }
+    function boxTemplate(boxObj){
+      return '<div box-id="'+boxObj.id+'" class="box '+boxObj.color+'" list-id="'+boxObj.semester_id+'">'+boxObj.name+'</div>'
+    }
+//    function headerTemplate(boxObj){
+//      return '<div class="header" list-id="'+boxObj.id+'">'+boxObj.name+'</div>'
+//    }
+    var bsl = null;
     Polymer({
       domReady: function(){
+//        this.boxs = [];
+        this.subjects = [];
+        this.polymerObj = this;
+        this.isFirstTime = true;
+//        this.bsl = null;
+        var polymerObj = this;
+        $(window).resize(function() {
+//            console.log($(window).height());
+            $(polymerObj.$['box-container']).css("height", $(window).height() - 275);
+        });
+
+        $(window).trigger('resize');
+      },
+      updateBoxs: function(selector){
+        var box_id,find_result;
+        var subjects = this.subjects;
+//        console.log($(  this.$[selector].querySelectorAll(".box")));
+        $(  this.$[selector].querySelectorAll(".box") ).each(function( index ) {
+          box_id = $( this ).attr("box-id");
+
+          for(var i=0;i < subjects.length;i++){
+            if(subjects[i].id == box_id){
+              if($( this ).attr("list-id") != subjects[i].semester_id){
+                console.log($( this ).attr("list-id") + " ("+subjects[i].short_name+") changes to "+ subjects[i].semester_id);
+                bsl.moveBox($( this ), subjects[i].semester_id);
+              }
+//              $( this ).attr("list-id", subjects[i].semester_id);
+              subjects.splice(i, 1);
+              break;
+            }
+          }
+        });
+      },
+      initialHeader: function(selector){
+        $(this.$[selector]).html("");
+        for(var i =0;i < this.data.semesters.length;i++){
+          var headerObj = {};
+          headerObj['id'] = "semster_id_"+i;
+          headerObj['semester_id'] = i;
+          headerObj['name'] =  this.data.semesters[i].year+'/'+this.data.semesters[i].semester;
+          headerObj['color'] = "header";
+          $(this.$[selector]).append(boxTemplate(headerObj));
+        }
+      },
+      initialBoxs: function(selector){
+        var subjectObj, cmp_semester;
+        for(var i =0;i < this.data.semesters.length;i++){
+          for(var j = 0; j<this.data.semesters[i].subjects.length;j++){
+            subjectObj = this.data.semesters[i].subjects[j];
+            cmp_semester = this.compare_semester(subjectObj.year, 
+                                                 subjectObj.semester,
+                                                 this.data.last_year,
+                                                 this.data.last_semester);
+            if(subjectObj.isFail){
+                subjectObj["color"] = "orange";
+            }else if(cmp_semester <= 0)
+                subjectObj["color"] = "grey";
+            else{
+                if( subjectObj.hasPrerequisite)
+                    subjectObj["color"] = "green";
+                else
+                    subjectObj["color"] = "blue";
+            }
+            subjectObj["semester_id"] = i;
+//            this.boxs.push(this.data.semesters[i].subjects[j]);
+            $(this.$[selector]).append(boxTemplate(subjectObj));
+          }
+        }
+      },
+      updateSubjectList: function(){
+        var subjectObj;
+        this.subjects = [];
+        for(var i =0;i < this.data.semesters.length;i++){
+            for(var j = 0; j<this.data.semesters[i].subjects.length;j++){
+              subjectObj = this.data.semesters[i].subjects[j]; 
+              subjectObj["semester_id"] = i;
+              this.subjects.push(subjectObj);
+            }
+          }
+        this.subjects.sort(function(a,b) { return a.id - b.id } );
       },
       dataChanged: function(){
+        var polymerObj = this;
+        console.log("Data has changed!");
+        this.updateSubjectList();
+        if(this.isFirstTime){
+          this.initialHeader("box-stack-list");
+          this.initialBoxs("box-stack-list");
+          bsl = new BoxStackList(this, "box-stack-list");
+          
+          $(this.$["box-stack-list"]).delegate('.box', 'click', function () {
+  //            $(this).hide();
+//              bsl.moveBox($(this));
+            polymerObj.$["detailDialog"].toggle();
+            polymerObj.prepareDialog($(this));
+            polymerObj.prepareGraph();
+            console.log("clicked");
+          });
+          this.isFirstTime = false;
+        }else{
+          this.updateBoxs("box-stack-list");
+        }
         this.json_output = JSON.stringify(this.data, null, 4);
       },
-      inputChanged: function(){
-//        this.json_input = JSON.stringify(this.input, null, 4);
+      prepareDialog:function(obj){
+        this.subjectName = obj.text();
+        var semester_id = parseInt(obj.attr("list-id"));
+        var subjectObj;
+        var id = obj.attr("box-id");
+        for(var j = 0; j<this.data.semesters[semester_id].subjects.length;j++){
+          if(this.data.semesters[semester_id].subjects[j].id == id){
+            subjectObj = this.data.semesters[semester_id].subjects[j];
+            break;
+          }
+        }
+        this.allData = JSON.stringify(subjectObj, null, 4);
+      },prepareGraph: function(){
+          
+      },
+      refreshChanged: function(){
+//        this.getSolution();
+          console.log("refresh");
+          bsl.rearrangeBoxList();
+      },
+      compare_semester : function(year1, semester1, year2, semester2){
+          if(year1 > year2)
+              return 1;
+          else if(year1 < year2)
+              return -1;
+          else {
+              if(semester1 > semester2)
+                  return 1;
+              else if(semester1 < semester2)
+                  return -1;
+              else
+                  return 0;
+          }
       }
 
     });
