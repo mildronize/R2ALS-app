@@ -49,7 +49,11 @@ E-mail: mildronize@gmail.com
             <app-route path="/notes" import="pages/notes-page.html"></app-route>
             <app-route path="/profile" import="pages/profile-page.html"></app-route>
             <app-route path="/study-result" import="pages/study-result-page.html"></app-route>
-            <app-route path="/get-plans" import="pages/get-plans-page.html"></app-route>
+            <app-route path="/get-plans/:pathArg1" import="pages/get-plans-page.html"></app-route>
+<!--
+            <app-route path="/get-plans/json" import="pages/subpages/get-plans-json-subpage.html"></app-route>
+            <app-route path="/get-plans/compact" import="pages/subpages/get-plans-compact-subpage.html"></app-route>
+-->
             <app-route path="*" import="pages/not-found-page.html"></app-route>
           </app-router>
         </template>

@@ -56,12 +56,19 @@
   <script>
     
     Polymer({
-      created: function(){
+      initialVar : function(){
         this.solution_id = 0;
         this.display_solution_id = 1;
         this.solutions_length = 1;
+//        this.isFirstTime = true;
+        this.hasLoadProblem = false;
+      },
+      created: function(){
+        this.isDomReady = false;
+        this.initialVar();
       },
       domReady: function(){
+        
         this.graph = new joint.dia.Graph;
         this.paper = new joint.dia.Paper({
             el: this.$.paper,
@@ -87,25 +94,32 @@
 
         });
         this.paper.scale(0.7, 0.7);
+        this.isDomReady = true;
+        if(this.hasLoadProblem){
+          // reload data
+          this.dataChanged();
+        }
         
       },
       dataChanged: function(){
-//        this.solution_id = 0;
-//        this.display_solution_id = 1;
-//        this.solutions_length = this.data.length;
+        if(this.isDomReady == false){
+          this.hasLoadProblem = true;
+          return false;
+        }
         this.getSolution();
       },
       refreshChanged: function(){
         this.getSolution();
       },
       getSolution: function(){
-        if(this.graph != null)
+        console.log(this.graph);
+        if(this.graph != null){
           this.graph.clear();    
         // this.graph.fromJSON(this.data[0]);
-//        var tmp_data = this.data[this.solution_id];
-//        exportJointJS = new ExportJointJS(this.data);
-//        this.graph.addCells(exportJointJS.getCells());
-        //          if (this.solution_id + 1 <= this.data.length)
+          
+          exportJointJS = new ExportJointJS(this.data);
+          this.graph.addCells(exportJointJS.getCells());
+        }
       },
 //      getNextSolution: function(){
 //        if(this.solution_id < this.data.length){

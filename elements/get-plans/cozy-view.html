@@ -115,10 +115,11 @@
         this.subjects = [];
         this.polymerObj = this;
         this.isFirstTime = true;
-        this.isDomReady = false;
+        
         this.hasLoadProblem = false;
       },
       created: function(){
+        this.isDomReady = false;
         this.initialVar();
       },
       domReady: function(){

@@ -249,10 +249,35 @@ function capitaliseFirstLetter(string){
   Polymer('get-plans-page', {
     created: function() {
       validateData();
-      this.tabSelected = "cozy-view";
+      this.defaultView = "compact";
+//      this.tabSelected = "cozy-view";
 //      this.tabSelected = "compact-view";
       this.loading_layout = false;
 //      this.refreshRequest = true;
+//      this.show = true;
+//      this.mylists = [
+//        {view: 'compact', active: true},
+//        {view: 'json', active: true},
+//        {view: 'cozy', active: false}
+//      ];
+      this.getPlansView = {
+        'compact': false,
+        'json': false
+      };
+      this.currentView = this.defaultView;
+//      this.resetView();
+    },
+    resetView: function(){
+      for(var index in this.getPlansView) { 
+         if (this.getPlansView.hasOwnProperty(index)) {
+             this.getPlansView[index] = false;
+         }
+      }
+    },
+    activeView: function(getPlansView){
+      this.resetView();
+      this.currentView = getPlansView;
+      this.getPlansView[getPlansView] = true;
     },
     ready: function () {
 //      this.models = models;
@@ -284,51 +309,61 @@ function capitaliseFirstLetter(string){
         }
     },
     attached: function () {
-      if(this.pathArg1 == "" )
+//      if(this.pathArg1 == "" )
       console.log(this.pathArg1);
-
+      if(this.pathArg1 in this.getPlansView) 
+        this.activeView(this.pathArg1);
+      else
+        this.activeView(this.defaultView);
     },
     domReady: function (){
-      this.$.compact_view.hidden = true;
-      this.$.full_detail_view.hidden = true;
-      this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = false;
+//      this.$.compact_view.hidden = true;
+//      this.$.full_detail_view.hidden = true;
+//      this.$.json_view.hidden = true;
+//      this.$.cozy_view.hidden = false;
 
 
     },
     requestPlans: function(){
       this.refreshRequest = !this.refreshRequest;
-      this.$.request.auto = true;
-    }
-    ,compactButHandler: function(event,detail,sender){
-      console.log("compactButHandler");
-      this.$.compact_view.hidden = false;
-      this.$.full_detail_view.hidden = true;
-      this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = true;
-      console.log(this.pathArg1);
+//      this.$.request.auto = true;
+      this.$.request.go();
     },
-    fullButHandler: function(event,detail,sender){
-      console.log("fullButHandler");
-      this.$.compact_view.hidden = true;
-      this.$.full_detail_view.hidden = false;
-      this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = true;
+    tabHandler: function(event,detail,sender){
+      var clickedTab = sender.getAttribute('name');
+      this.activeView(clickedTab);
+      window.history.pushState("object or string", clickedTab, "#/get-plans/"+clickedTab);
     },
-    jsonButHandler: function(event,detail,sender){
-      console.log("jsonButHandler");
-      this.$.compact_view.hidden = true;
-      this.$.full_detail_view.hidden = true;
-      this.$.json_view.hidden = false;
-      this.$.cozy_view.hidden = true;
-    },
-    cozyButHandler: function(event,detail,sender){
-      console.log("jsonButHandler");
-      this.$.compact_view.hidden = true;
-      this.$.full_detail_view.hidden = true;
-      this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = false;
-    },
+//    compactButHandler: function(event,detail,sender){
+//      console.log(sender.getAttribute('name'));
+////      sender.getAttribute('name');
+//      this.$.compact_view.hidden = false;
+//      this.$.full_detail_view.hidden = true;
+//      this.$.json_view.hidden = true;
+//      this.$.cozy_view.hidden = true;
+////      console.log(this.pathArg1);
+//    },
+//    fullButHandler: function(event,detail,sender){
+//      console.log("fullButHandler");
+//      this.$.compact_view.hidden = true;
+//      this.$.full_detail_view.hidden = false;
+//      this.$.json_view.hidden = true;
+//      this.$.cozy_view.hidden = true;
+//    },
+//    jsonButHandler: function(event,detail,sender){
+//      console.log("jsonButHandler");
+//      this.$.compact_view.hidden = true;
+//      this.$.full_detail_view.hidden = true;
+//      this.$.json_view.hidden = false;
+//      this.$.cozy_view.hidden = true;
+//    },
+//    cozyButHandler: function(event,detail,sender){
+//      console.log("jsonButHandler");
+//      this.$.compact_view.hidden = true;
+//      this.$.full_detail_view.hidden = true;
+//      this.$.json_view.hidden = true;
+//      this.$.cozy_view.hidden = false;
+//    },
     handleError: function(e){
         var xhr = e.detail.xhr;
         this.messageHeading = "Error";
@@ -379,7 +414,7 @@ function capitaliseFirstLetter(string){
 //        console.log(this.cozy_view.polymerObj);
 //        var bsl = new BoxStackList(this.cozy_view.polymerObj, "box-stack-list");
         console.log("responseReady");
-        this.$.request.auto = false;
+//        this.$.request.auto = false;
     },
     updateSolution: function(){
         this.current_plan = this.response.data.plans[this.solution_id];

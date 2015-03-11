@@ -20,10 +20,12 @@
 <link rel="import" href="../components/app-router/app-router.html">
 <link rel="import" href="../components/core-animated-pages/core-animated-pages.html">
 
-<polymer-element name="get-plans-page">
+<!--
+<link rel="import" href="../pages/subpages/get-plans-compact-subpage.html">
+<link rel="import" href="../pages/subpages/get-plans-json-subpage.html">
+-->
+<polymer-element name="get-plans-page" attributes="pathArg1 queryParam1">
   <template>
-<!--        <link rel="stylesheet" href="../../external_components/joint.min.css" shim-shadowdom>-->
-
     <style>
 
       paper-spinner.blue::shadow .circle {
@@ -73,57 +75,93 @@
       <div class="header">
           <div class="bottom fit" horizontal layout>
     
-            <paper-tabs selected="{{tabSelected}}" valueattr="name" flex>
+            <paper-tabs selected="{{currentView}}" valueattr="name" flex>
 
-              <paper-tab name="compact-view" on-tap="{{compactButHandler}}">COMPACT</paper-tab>
-              <paper-tab name="full-detail-view" on-tap="{{fullButHandler}}">FULL DETAIL</paper-tab>
-              <paper-tab name="cozy-view" on-tap="{{cozyButHandler}}">Cozy</paper-tab>
-              <paper-tab name="json-view" on-tap="{{jsonButHandler}}">JSON</paper-tab>
+              <paper-tab name="compact" on-tap="{{tabHandler}}">COMPACT</paper-tab>
+              <paper-tab name="cozy" on-tap="{{tabHandler}}">Cozy</paper-tab>
+              <paper-tab name="full-detail" on-tap="{{tabHandler}}">FULL DETAIL</paper-tab>
+              <paper-tab name="json" on-tap="{{tabHandler}}">JSON</paper-tab>
 
             </paper-tabs>
-
-        </div>
-        <section>
-          <paper-shadow>
-            <div horizontal center-justified layout hidden?="{{!loading_layout}}">
-            <div horizontal center-justified layout hidden?="{{!loading_layout}}">
-              <div vertical layout >
-                <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
-      <!--            <p><paper-button raised on-tap="{{getNextSolution}}">No</paper-button> <paper-button raised class="colored">Yes</paper-button></p>-->
-                    <p>
-                      <paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button>     
-                      <paper-button raised on-tap="{{refreshSolution}}">Reload UI</paper-button>
-<!--                      <paper-button raised on-tap="{{requestPlans}}">Refresh</paper-button>-->
-                      <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
-              </div>
-            </div>
-          </paper-shadow>
-        </section>
+          </div>
         
-      </div>
-
-      
+          <section>
+              <paper-shadow>
+                <div horizontal center-justified layout hidden?="{{!loading_layout}}">
+                  <div vertical layout >
+                    <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
+                        <p>
+                          <paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button>     
+                          <paper-button raised on-tap="{{refreshSolution}}">Reload UI</paper-button>
+                          <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
+                  </div>
+                </div>
+              </paper-shadow>
+            </section>
+            <div horizontal center-justified layout hidden?="{{loading_layout}}">
+              <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
+            </div>
+    </div>
 <!--
+      
       <app-router on-state-change="{{stateChange}}" core-animated-pages transitions="hero-transition cross-fade">
-            <app-route path="/" import="pages/home-page.html"></app-route>
-            <app-route path="/get-plans/json" import="pages/get-plans-page.html"></app-route>
-            <app-route path="*" import="pages/not-found-page.html"></app-route>
+            <app-route path="/json" import="../pages/subpages/get-plans-json-subpage.html"></app-route>
+            <app-route path="*" import="../pages/subpages/not-found-subpage.html"></app-route>
       </app-router>
+        
 -->
         
-        
-      <div horizontal center-justified layout hidden?="{{loading_layout}}">
-        <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
-      </div>
+      
+<!--
       <div>
         <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
         <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
         <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}" polymerObj="{{cozy_view}}" refresh="{{refresh}}" refreshRequest="{{refreshRequest}}"></cozy-view></span>
         <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>
       </div>
+-->
+      
+      <template bind>
+        <template bind if="{{ getPlansView['compact'] }}">
+          <compact-view 
+                        data="{{current_plan}}" 
+                        refresh="{{refresh}}"></compact-view>
+        </template>
+        <template bind if="{{ getPlansView['full-detail'] }}">
+          <full-detail-view 
+                            id="full_detail_view" 
+                            data="{{current_plan}}" 
+                            refresh="{{refresh}}"></full-detail-view>
+        </template>
+        <template bind if="{{ getPlansView['cozy'] }}">
+          <cozy-view 
+                     id="cozy_view" 
+                     data="{{current_plan}}" 
+                     polymerObj="{{cozy_view}}" 
+                     refresh="{{refresh}}" 
+                     refreshRequest="{{refreshRequest}}"></cozy-view>
+        </template>
+        <template bind if="{{ getPlansView['json'] }}">
+          <json-view 
+                     id="json_view" 
+                     data="{{current_plan}}" 
+                     refresh="{{refresh}}" 
+                     input="{{input}}"></json-view>
+        </template>
+      </template>
 
-        
-        
+      
+      
+<!--
+      <template repeat="{{item in myList.items}}">
+        <li>{{item.name}} :  {{myList.showItems}}</li>
+      </template>
+-->
+      
+
+      
+<!--      <get-plans-{{pathArg1}}-subpage></get-plans-{{pathArg1}}-subpage>-->
+<!--      <app-route path="*" import="../pages/subpages/get-plans-{{pathArg1}}-subpage.html"></app-route>-->
 
       <core-ajax id="request"
         url="http://127.0.0.1:6543/apis/processor" 
