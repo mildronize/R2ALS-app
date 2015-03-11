@@ -5,6 +5,9 @@
 <link rel="import" href="../components/paper-input/paper-input-decorator.html">
 <link rel="import" href="../components/paper-input/paper-input.html">
 <link rel="import" href="../components/paper-button/paper-button.html">
+<link rel="import" href="../components/core-ajax/core-ajax.html">
+<link rel="import" href="../components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../components/paper-tabs/paper-tabs.html">
 
 <link rel="import" href="../elements/r2als-anchor-button.html">
 <link rel="import" href="../elements/r2als-paper-action-dialog.html">
@@ -14,16 +17,8 @@
 <link rel="import" href="../elements/get-plans/compact-view.html">
 <link rel="import" href="../elements/get-plans/cozy-view.html">
 
-<link rel="import" href="../components/core-ajax/core-ajax.html">
-<link rel="import" href="../components/paper-spinner/paper-spinner.html">
-<link rel="import" href="../components/paper-tabs/paper-tabs.html">
-
-<!--
-<script src="../components/jquery/dist/jquery.min.js"></script>
-<script src="../elements/get-plans/box-stack-list.js"></script>
--->
-<!--<script src="/components/jquery-validity/build/jquery.validity.min.js"></script>-->
-
+<link rel="import" href="../components/app-router/app-router.html">
+<link rel="import" href="../components/core-animated-pages/core-animated-pages.html">
 
 <polymer-element name="get-plans-page">
   <template>
@@ -52,19 +47,7 @@
       color: #fff;
       box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.2);
     }
-/*
-    paper-tabs a,
-    paper-tabs a:link,
-    paper-tabs a:visited,
-    paper-tabs a:hover,
-    paper-tabs a:active{
-      color:inherit;
-      text-decoration: inherit;
-      padding: inherit;
-      margin: inherit;
-    }
- 
-*/
+
     core-toolbar paper-tabs {
       box-shadow: none;
     }
@@ -107,7 +90,11 @@
               <div vertical layout >
                 <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
       <!--            <p><paper-button raised on-tap="{{getNextSolution}}">No</paper-button> <paper-button raised class="colored">Yes</paper-button></p>-->
-                    <p><paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button><paper-button raised on-tap="{{refreshSolution}}">Refresh</paper-button><paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
+                    <p>
+                      <paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button>     
+                      <paper-button raised on-tap="{{refreshSolution}}">Reload UI</paper-button>
+<!--                      <paper-button raised on-tap="{{requestPlans}}">Refresh</paper-button>-->
+                      <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
               </div>
             </div>
           </paper-shadow>
@@ -115,22 +102,30 @@
         
       </div>
 
-<!--      <div class="header">-->
-        <div class="scroll">
-          <div horizontal center-justified layout hidden?="{{loading_layout}}">
-            <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
-          </div>
-          <div>
-            <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
-            <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
-            <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}" polymerObj="{{cozy_view}}" refresh="{{refresh}}"></cozy-view></span>
-            <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>
-          </div>
-          
-        </div>
-<!--      </div>-->
-      <core-ajax 
-        auto 
+      
+<!--
+      <app-router on-state-change="{{stateChange}}" core-animated-pages transitions="hero-transition cross-fade">
+            <app-route path="/" import="pages/home-page.html"></app-route>
+            <app-route path="/get-plans/json" import="pages/get-plans-page.html"></app-route>
+            <app-route path="*" import="pages/not-found-page.html"></app-route>
+      </app-router>
+-->
+        
+        
+      <div horizontal center-justified layout hidden?="{{loading_layout}}">
+        <paper-spinner id="loading" class="blue space-div" active></paper-spinner>
+      </div>
+      <div>
+        <span id="compact_view"><compact-view data="{{current_plan}}" refresh="{{refresh}}"></compact-view></span>
+        <span id="full_detail_view"><full-detail-view id="full_detail_view" data="{{current_plan}}" refresh="{{refresh}}"></full-detail-view></span>
+        <span id="cozy_view"><cozy-view id="cozy_view" data="{{current_plan}}" polymerObj="{{cozy_view}}" refresh="{{refresh}}" refreshRequest="{{refreshRequest}}"></cozy-view></span>
+        <span id="json_view"><json-view id="json_view" data="{{current_plan}}" refresh="{{refresh}}" input="{{input}}"></json-view></span>
+      </div>
+
+        
+        
+
+      <core-ajax id="request"
         url="http://127.0.0.1:6543/apis/processor" 
         method='POST' 
         handleAs="json"
@@ -146,8 +141,6 @@
       </template>
 -->
 
-      
-      
       <!--  message from server dialog    -->
       <r2als-paper-action-dialog heading="{{messageHeading}}" backdrop layered="false" id="messageDialog">
         <template repeat="{{mb in messageBody}}">

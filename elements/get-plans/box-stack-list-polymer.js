@@ -4,7 +4,7 @@ function BoxStackList(polymerObj,selector){
       this.widthMargin = 20;
       this.HeightMargin = 10;
       this.width = 80;
-      this.currentzindex = 0;
+//      this.currentzindex = 0;
       
 //      this.initialHeader = function(extendBoxList){
 //         $(  polymerObj.$[header_selector].querySelectorAll(".header")).each(function( index ) {
@@ -188,7 +188,7 @@ function BoxStackList(polymerObj,selector){
               if(this.boxLists[old_list_id].length <= this.boxLists[target_list_id].length)
                 isSwap = true;
               else isSwap = false;
-              box.css("z-index",this.currentzindex++);
+              box.css("z-index", '+=1');
               this.autoFit(this.boxLists, target_list_id, isSwap, box);
               
 //              console.log(this.boxLists);

@@ -6,6 +6,7 @@
 <!-- 1. Load platform support before any code that touches the DOM. -->
 <!--<script src="components/webcomponentsjs/webcomponents.js"></script>-->
 <script src="../../components/vis/dist/vis.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../components/vis/dist/vis.min.css">
 <!--
 <link rel="import" href="components/polymer/polymer.html">
 <link rel="import" href="components/font-roboto/roboto.html">
@@ -20,18 +21,29 @@
 <div id="mynetwork"></div>
 
 <script type="text/javascript">
+  var margin = 20;
+  var width = parseInt(window.parent.frameObj['width']);
+  var height = parseInt(window.parent.frameObj['height']);
+  var subjectObj = window.parent.frameObj['subjectObj'];
+  var links = window.parent.frameObj['link'];
+  console.log(links);
   // create an array with nodes
+  function randint(a,b){
+     return Math.floor((Math.random() * b) + a); 
+    }
+  
   var nodes = [
-    {id: 1, label: 'Node 1'},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
+    {id: 1, label: 'Node '+randint(1,100)},
+    {id: 2, label: 'Node '+randint(1,100)},
+    {id: 3, label: 'Node '+randint(1,100)},
+    {id: 4, label: 'Node '+randint(1,100)},
+    {id: 5, label: 'Node '+randint(1,100)}
   ];
+  console.log(nodes);
 
   // create an array with edges
   var edges = [
-    {from: 1, to: 2},
+    {from: 1, to: 2, group: 'test_group'},
     {from: 1, to: 3},
     {from: 2, to: 4},
     {from: 2, to: 5}
@@ -44,9 +56,28 @@
     edges: edges,
   };
   var options = {
-    width: '400px',
-    height: '400px'
+    width: width-margin+'px',
+    height: height-margin+'px',
+    navigation: {
+      speed: {
+        x: 10,
+        y: 10,
+        zoom: 0.02
+      },
+      bindToWindow: true
+    },
+    edges: {
+      color: 'red',
+      width: 2,
+      arrowScaleFactor: 5
+    },
+    groups: {
+      test_group: {
+        color: 'blue',
+      }
+    }
   };
+  console.log(options);
   var network = new vis.Network(container, data, options);
 </script>
 

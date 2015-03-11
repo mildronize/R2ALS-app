@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-//  
+//
 //Name: Thada Wangthammang
 //Github: https://github.com/mildronize/R2ALS-app
 //E-mail: mildronize@gmail.com
@@ -8,7 +8,7 @@
 //  "study-result-page" Section
 var models;
 var prefix_link = "#/";
-  
+
 function initialModels(){
 	models = {};
 	models.member = {};
@@ -19,7 +19,7 @@ function initialModels(){
 	models.is_testing = true;
 	models.semesters = [];
 }
-  
+
 function isBrowserSupportStorage(){
 	  // Check browser support
 	if (typeof(Storage) != "undefined")return true;
@@ -28,7 +28,7 @@ function isBrowserSupportStorage(){
 		return false;
 	}
 }
-  
+
 function initialLocalStorage(){
 	if (isBrowserSupportStorage()) {
 //		console.log(localStorage.getItem("models"));
@@ -37,28 +37,29 @@ function initialLocalStorage(){
 	}
 }
 
-function updateLocalStorage(){
+function updateLocalStorage(name, data){
 	if (isBrowserSupportStorage()) {
-		localStorage.setItem("models", JSON.stringify(models));
-		console.log(JSON.parse(localStorage.getItem("models")));
+		localStorage.setItem(name , JSON.stringify(data));
+		console.log(JSON.parse(localStorage.getItem(name)));
 	}
 }
 
-function loadLocalStorage(){
+function loadLocalStorage(name){
 	if (isBrowserSupportStorage) {
-		if(localStorage.getItem("models") != null)
-			models = JSON.parse(localStorage.getItem("models"));
+		if(localStorage.getItem(name) != null)
+			return JSON.parse(localStorage.getItem(name));
 	}
+    return null;
 }
- 
+
 function validateData(){
 //    console.log("validateData");
 }
-	
+
 function capitaliseFirstLetter(string){
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
-	
+
   var n = 0;
 
   Polymer('main-app', {
@@ -73,12 +74,12 @@ function capitaliseFirstLetter(string){
       }
       console.log(str_ck);
       console.log(document.URL);
-      
+
       initialLocalStorage();
     },
     stateChange: function (event) {
       //   console.log(document.querySelector('study-result-page'));
-      console.log("Event: " + event); 
+      console.log("Event: " + event);
       n += 1;
     },
 //    storageIdChanged: function() {
@@ -88,13 +89,14 @@ function capitaliseFirstLetter(string){
 //          models = this.storage.value;
 //      }
 //    }
-    
-    
+
+
   });
-  
+
   Polymer('home-page', {
-    created: function() { 
-      loadLocalStorage();
+    created: function() {
+      var tmp = loadLocalStorage("models");
+      if(tmp != null) models = tmp;
       console.log(models);
       if('name' in models.member){
         this.name = models.member.name;
@@ -102,39 +104,41 @@ function capitaliseFirstLetter(string){
     },
     nameChanged: function(oldValue, newValue) {
       models.member.name = this.name;
-      updateLocalStorage();
+      updateLocalStorage("models", models);
     },
     onEnter: function(event){
       location.href = prefix_link + this.$.anchor.getAttribute("page");
     }
   });
-  
+
   Polymer('profile-page', {
-    created: function() { 
-		loadLocalStorage();
+    created: function() {
+		var tmp = loadLocalStorage("models");
+   if(tmp != null) models = tmp;
 		this.subject_group = models.member.subject_group;
 		this.branch = models.member.branch;
     },
     subject_groupChanged: function(oldValue, newValue) {
 		models.member.subject_group = newValue;
 		//      console.log(newValue);
-		updateLocalStorage();
+		updateLocalStorage("models", models);
     },
     branchChanged: function(oldValue, newValue) {
 		models.member.branch = newValue;
 		//      console.log(newValue);
-		updateLocalStorage();
+		updateLocalStorage("models", models);
     },
     onEnter: function(event){
       location.href = prefix_link + this.$.anchor.getAttribute("page");
     }
   });
-    
+
   Polymer('study-result-page', {
     // initialize the element's model
- 
-    created: function() { 
-      loadLocalStorage();
+
+    created: function() {
+      var tmp = loadLocalStorage("models");
+      if(tmp != null) models = tmp;
       this.hideMessage = false;
       this.subjectInSemesters = models.semesters;
       this.changeData();
@@ -167,7 +171,7 @@ function capitaliseFirstLetter(string){
       var found = false;
       console.log(this.tempSubjectData);
       if(this.subjectInSemesters.length > 0){
-        
+
         for(var i=0 ;i< this.subjectInSemesters.length; i++){
           var subjectInSemester = this.subjectInSemesters[i];
           console.log(this.tempSubjectData);
@@ -222,7 +226,7 @@ function capitaliseFirstLetter(string){
       }else {
         this.hideMessage = true;
       }
-      updateLocalStorage();
+      updateLocalStorage("models", models);
     },
     changeItemAction: function(e, detail) {
       //      clear semester if it is null
@@ -237,30 +241,49 @@ function capitaliseFirstLetter(string){
 //      this.tempSubjectData = detail.subject;
 //      this.$.addSubjectItem.toggle();
     }
-    
+
   });
-  
-  
-  
+
+
+
   Polymer('get-plans-page', {
-    created: function() { 
+    created: function() {
       validateData();
       this.tabSelected = "cozy-view";
 //      this.tabSelected = "compact-view";
       this.loading_layout = false;
+//      this.refreshRequest = true;
     },
     ready: function () {
 //      this.models = models;
-        loadLocalStorage();
+        var tmp = loadLocalStorage("models");
+        if(tmp != null) models = tmp;
         this.json = JSON.stringify(models, null, 4);
         this.input = models;
 //        this.$.compact_view.hidden = false;
 //        this.$.full_detail_view.hidden = false;
 //        this.$.json_view.hidden = false;
 
-        console.log(this.pathArg1);
+//        console.log(this.pathArg1);
+        this.refresh = true;
+        tmp = loadLocalStorage("plans");
+        if(tmp == null) 
+          this.requestPlans();
+        else{
+//          var polymerObj = this;
+//          setTimeout(function(){
+//            polymerObj.response = tmp;
+//            polymerObj.responseReady();
+//            polymerObj.$.loading.active = false;
+//            polymerObj.loading_layout = true;
+//          }, 1000);
+          this.response = tmp;
+          this.responseReady();
+          this.$.loading.active = false;
+          this.loading_layout = true;
+        }
     },
-    attached: function () { 
+    attached: function () {
       if(this.pathArg1 == "" )
       console.log(this.pathArg1);
 
@@ -269,16 +292,20 @@ function capitaliseFirstLetter(string){
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = false; 
-      
-      
+      this.$.cozy_view.hidden = false;
+
+
     },
-    compactButHandler: function(event,detail,sender){
+    requestPlans: function(){
+      this.refreshRequest = !this.refreshRequest;
+      this.$.request.auto = true;
+    }
+    ,compactButHandler: function(event,detail,sender){
       console.log("compactButHandler");
       this.$.compact_view.hidden = false;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = true; 
+      this.$.cozy_view.hidden = true;
       console.log(this.pathArg1);
     },
     fullButHandler: function(event,detail,sender){
@@ -286,21 +313,21 @@ function capitaliseFirstLetter(string){
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = false;
       this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = true; 
+      this.$.cozy_view.hidden = true;
     },
     jsonButHandler: function(event,detail,sender){
       console.log("jsonButHandler");
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = false;
-      this.$.cozy_view.hidden = true; 
+      this.$.cozy_view.hidden = true;
     },
     cozyButHandler: function(event,detail,sender){
       console.log("jsonButHandler");
       this.$.compact_view.hidden = true;
       this.$.full_detail_view.hidden = true;
       this.$.json_view.hidden = true;
-      this.$.cozy_view.hidden = false; 
+      this.$.cozy_view.hidden = false;
     },
     handleError: function(e){
         var xhr = e.detail.xhr;
@@ -320,7 +347,7 @@ function capitaliseFirstLetter(string){
 //      console.log(e);
       if(e.detail.xhr.status != 0){
         this.response = e.detail.response;
-        
+
         if( this.response.type != "success"){
           this.messageHeading = capitaliseFirstLetter(this.response.type);
           this.messageBody = [];
@@ -341,19 +368,22 @@ function capitaliseFirstLetter(string){
       this.loading_layout = true;
     },
     responseReady: function(){
-//        this.current_plan = response.data.plans[this.solution_id];
+        console.log(this.response);
+        console.log("responseReady");
+        updateLocalStorage("plans", this.response);
         this.solution_id = 0;
         this.display_solution_id = 1;
-        this.refresh = true;
         this.solution_length = this.response.data.plans.length;
         this.updateSolution();
 //        this.initialCozyView();
 //        console.log(this.cozy_view.polymerObj);
 //        var bsl = new BoxStackList(this.cozy_view.polymerObj, "box-stack-list");
-        
+        console.log("responseReady");
+        this.$.request.auto = false;
     },
     updateSolution: function(){
         this.current_plan = this.response.data.plans[this.solution_id];
+        console.log("updateSolution");
     },
     getNextSolution: function(){
         if(this.solution_id < this.solution_length-1){
@@ -375,11 +405,16 @@ function capitaliseFirstLetter(string){
       },
     refreshSolution: function(){
       this.refresh = !this.refresh;
+      console.log("refreshSolution");
+    },
+    current_planChanged : function(){
+      console.log("plan changed") ;
+      console.log(this.current_plan);
     }
-    
-    
-  });
-  
 
-  
+
+  });
+
+
+
 })();

@@ -99,7 +99,8 @@
         this.getSolution();
       },
       getSolution: function(){
-        this.graph.clear();    
+        if(this.graph != null)
+          this.graph.clear();    
         // this.graph.fromJSON(this.data[0]);
 //        var tmp_data = this.data[this.solution_id];
 //        exportJointJS = new ExportJointJS(this.data);

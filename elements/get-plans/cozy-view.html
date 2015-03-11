@@ -5,7 +5,7 @@
 <script src="box-stack-list-polymer.js"></script>
 
 <link rel="import" href="../../elements/r2als-paper-action-dialog.html">
-<polymer-element name="cozy-view" attributes="data polymerObj refresh" >
+<polymer-element name="cozy-view" attributes="data polymerObj refresh refreshRequest" >
   <template>
     <style>
       .json{
@@ -71,6 +71,9 @@
         color: #eee;
         font-weight: bold;
       }
+      #graph{
+        border: 1px solid #EEEEEE;
+      }
 
       
     </style>
@@ -82,8 +85,11 @@
     
       <!--  message from server dialog    -->
       <r2als-paper-action-dialog heading="{{subjectName}}" backdrop layered="false" id="detailDialog">
-        <iframe src="graph.html"></iframe>
-        <div id="graph"></div>
+<!--        <iframe width="560" height="315" frameborder="0" src="graph.html"></iframe>-->
+        <div id="prerequisiteSection">
+          <h5>Prerequisite subject</h5>
+          <div id="graph"></div>
+        </div>
         <section class="json">
           {{allData}}
         </section>
@@ -105,19 +111,31 @@
 //    }
     var bsl = null;
     Polymer({
-      domReady: function(){
-//        this.boxs = [];
+      initialVar : function(){
         this.subjects = [];
         this.polymerObj = this;
         this.isFirstTime = true;
-//        this.bsl = null;
+        this.isDomReady = false;
+        this.hasLoadProblem = false;
+      },
+      created: function(){
+        this.initialVar();
+      },
+      domReady: function(){
         var polymerObj = this;
+        this.isDomReady = true;
+        if(this.hasLoadProblem){
+          // reload data
+          this.dataChanged();
+        }
+        
         $(window).resize(function() {
 //            console.log($(window).height());
             $(polymerObj.$['box-container']).css("height", $(window).height() - 275);
         });
 
         $(window).trigger('resize');
+        
       },
       updateBoxs: function(selector){
         var box_id,find_result;
@@ -188,22 +206,36 @@
         this.subjects.sort(function(a,b) { return a.id - b.id } );
       },
       dataChanged: function(){
+        
+        if(this.isDomReady == false){
+          this.hasLoadProblem = true;
+          return false;
+        }
+        var subjectObj;
         var polymerObj = this;
+        console.log(this.data);
         console.log("Data has changed!");
         this.updateSubjectList();
         if(this.isFirstTime){
           this.initialHeader("box-stack-list");
           this.initialBoxs("box-stack-list");
+
           bsl = new BoxStackList(this, "box-stack-list");
           
           $(this.$["box-stack-list"]).delegate('.box', 'click', function () {
   //            $(this).hide();
 //              bsl.moveBox($(this));
             polymerObj.$["detailDialog"].toggle();
-            polymerObj.prepareDialog($(this));
-            polymerObj.prepareGraph();
+            subjectObj = polymerObj.prepareDialog($(this));
+            if(subjectObj.hasPrerequisite)
+              polymerObj.prepareGraph(subjectObj);
+            else{
+              $(polymerObj.$['prerequisiteSection']).hide();
+              $(polymerObj.$['graph']).html("");
+            }
             console.log("clicked");
           });
+          console.log("first time run");
           this.isFirstTime = false;
         }else{
           this.updateBoxs("box-stack-list");
@@ -222,14 +254,56 @@
           }
         }
         this.allData = JSON.stringify(subjectObj, null, 4);
-      },prepareGraph: function(){
-          
+        return subjectObj;
+      },prepareGraph: function(subjectObj){
+          $(this.$['prerequisiteSection']).show();
+          window.frameObj = { 
+            "width" : 640, 
+            "height": 315,
+            "subjectObj": subjectObj,
+            "link": this.findLinks(subjectObj)
+          };
+          $(this.$['graph']).html('<iframe width="'+window.frameObj.width+'" height="'+window.frameObj.height+'" frameborder="0" src="elements/get-plans/graph.html"></iframe>');
+      },
+      findLinks: function(subjectObj){
+        var tmp = [], link;
+        for (var i =0;i < this.data.links.length; i++){
+          link = this.data.links[i];
+          if( link.target == subjectObj.id | link.source == subjectObj.id){
+            link['targetName'] = this.findSubjectName(link.target);
+            link['sourceName'] = this.findSubjectName(link.source);
+            tmp.push(link);
+          }
+        }
+        return tmp;
+      },
+      findSubjectName: function(subject_id){
+        var subjects;
+//        console.log(this.data.semesters);
+        for(var i=0;i < this.data.semesters.length; i++){
+          subjects = this.data.semesters[i].subjects;
+          for(var j=0;j < subjects.length;j++){
+//            console.log(subjects[j]);
+            if(subjects[j].id == subject_id){
+              return subjects[j].name;
+              break;
+            }
+          }
+        }
+        return "";
       },
       refreshChanged: function(){
 //        this.getSolution();
           console.log("refresh");
-          bsl.rearrangeBoxList();
+          if(bsl != null)
+            bsl.rearrangeBoxList();
+//          console.log("isDomReady"+this.isDomReady);
+//        console.log(this.refreshRequest);
       },
+//      refreshRequestChanged: function(){
+//        this.initialVar();
+//        console.log("refreshRequestChanged");
+//      },
       compare_semester : function(year1, semester1, year2, semester2){
           if(year1 > year2)
               return 1;
