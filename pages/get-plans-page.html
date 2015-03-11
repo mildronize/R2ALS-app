@@ -78,7 +78,7 @@
             <paper-tabs selected="{{currentView}}" valueattr="name" flex>
 
               <paper-tab name="compact" on-tap="{{tabHandler}}">COMPACT</paper-tab>
-              <paper-tab name="cozy" on-tap="{{tabHandler}}">Cozy</paper-tab>
+              <paper-tab name="cozy" on-tap="{{tabHandler}}">COZY</paper-tab>
               <paper-tab name="full-detail" on-tap="{{tabHandler}}">FULL DETAIL</paper-tab>
               <paper-tab name="json" on-tap="{{tabHandler}}">JSON</paper-tab>
 
@@ -92,7 +92,7 @@
                     <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
                         <p>
                           <paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button>     
-                          <paper-button raised on-tap="{{refreshSolution}}">Reload UI</paper-button>
+                          <paper-button raised on-tap="{{requestPlans}}">Run Again</paper-button>
                           <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
                   </div>
                 </div>
@@ -124,28 +124,23 @@
       <template bind>
         <template bind if="{{ getPlansView['compact'] }}">
           <compact-view 
-                        data="{{current_plan}}" 
-                        refresh="{{refresh}}"></compact-view>
+                        data="{{current_plan}}"></compact-view>
         </template>
         <template bind if="{{ getPlansView['full-detail'] }}">
           <full-detail-view 
                             id="full_detail_view" 
-                            data="{{current_plan}}" 
-                            refresh="{{refresh}}"></full-detail-view>
+                            data="{{current_plan}}"></full-detail-view>
         </template>
         <template bind if="{{ getPlansView['cozy'] }}">
           <cozy-view 
                      id="cozy_view" 
                      data="{{current_plan}}" 
-                     polymerObj="{{cozy_view}}" 
-                     refresh="{{refresh}}" 
-                     refreshRequest="{{refreshRequest}}"></cozy-view>
+                     polymerObj="{{cozy_view}}"></cozy-view>
         </template>
         <template bind if="{{ getPlansView['json'] }}">
           <json-view 
                      id="json_view" 
                      data="{{current_plan}}" 
-                     refresh="{{refresh}}" 
                      input="{{input}}"></json-view>
         </template>
       </template>

@@ -262,7 +262,9 @@ function capitaliseFirstLetter(string){
 //      ];
       this.getPlansView = {
         'compact': false,
-        'json': false
+        'json': false,
+        'full-detail': false,
+        'cozy': false
       };
       this.currentView = this.defaultView;
 //      this.resetView();
@@ -285,23 +287,11 @@ function capitaliseFirstLetter(string){
         if(tmp != null) models = tmp;
         this.json = JSON.stringify(models, null, 4);
         this.input = models;
-//        this.$.compact_view.hidden = false;
-//        this.$.full_detail_view.hidden = false;
-//        this.$.json_view.hidden = false;
-
-//        console.log(this.pathArg1);
-        this.refresh = true;
+//        this.refresh = true;
         tmp = loadLocalStorage("plans");
         if(tmp == null) 
           this.requestPlans();
         else{
-//          var polymerObj = this;
-//          setTimeout(function(){
-//            polymerObj.response = tmp;
-//            polymerObj.responseReady();
-//            polymerObj.$.loading.active = false;
-//            polymerObj.loading_layout = true;
-//          }, 1000);
           this.response = tmp;
           this.responseReady();
           this.$.loading.active = false;
@@ -309,61 +299,25 @@ function capitaliseFirstLetter(string){
         }
     },
     attached: function () {
-//      if(this.pathArg1 == "" )
       console.log(this.pathArg1);
       if(this.pathArg1 in this.getPlansView) 
         this.activeView(this.pathArg1);
       else
         this.activeView(this.defaultView);
     },
-    domReady: function (){
-//      this.$.compact_view.hidden = true;
-//      this.$.full_detail_view.hidden = true;
-//      this.$.json_view.hidden = true;
-//      this.$.cozy_view.hidden = false;
-
-
-    },
     requestPlans: function(){
-      this.refreshRequest = !this.refreshRequest;
-//      this.$.request.auto = true;
+//      this.refreshRequest = !this.refreshRequest;
+//      this.refresh = !this.refresh;
       this.$.request.go();
+      this.$.loading.active = true;
+      this.loading_layout = false;
     },
     tabHandler: function(event,detail,sender){
       var clickedTab = sender.getAttribute('name');
       this.activeView(clickedTab);
       window.history.pushState("object or string", clickedTab, "#/get-plans/"+clickedTab);
     },
-//    compactButHandler: function(event,detail,sender){
-//      console.log(sender.getAttribute('name'));
-////      sender.getAttribute('name');
-//      this.$.compact_view.hidden = false;
-//      this.$.full_detail_view.hidden = true;
-//      this.$.json_view.hidden = true;
-//      this.$.cozy_view.hidden = true;
-////      console.log(this.pathArg1);
-//    },
-//    fullButHandler: function(event,detail,sender){
-//      console.log("fullButHandler");
-//      this.$.compact_view.hidden = true;
-//      this.$.full_detail_view.hidden = false;
-//      this.$.json_view.hidden = true;
-//      this.$.cozy_view.hidden = true;
-//    },
-//    jsonButHandler: function(event,detail,sender){
-//      console.log("jsonButHandler");
-//      this.$.compact_view.hidden = true;
-//      this.$.full_detail_view.hidden = true;
-//      this.$.json_view.hidden = false;
-//      this.$.cozy_view.hidden = true;
-//    },
-//    cozyButHandler: function(event,detail,sender){
-//      console.log("jsonButHandler");
-//      this.$.compact_view.hidden = true;
-//      this.$.full_detail_view.hidden = true;
-//      this.$.json_view.hidden = true;
-//      this.$.cozy_view.hidden = false;
-//    },
+
     handleError: function(e){
         var xhr = e.detail.xhr;
         this.messageHeading = "Error";
@@ -438,10 +392,10 @@ function capitaliseFirstLetter(string){
           this.updateSolution();
         }
       },
-    refreshSolution: function(){
-      this.refresh = !this.refresh;
-      console.log("refreshSolution");
-    },
+//    refreshSolution: function(){
+//      this.refresh = !this.refresh;
+//      console.log("refreshSolution");
+//    },
     current_planChanged : function(){
       console.log("plan changed") ;
       console.log(this.current_plan);

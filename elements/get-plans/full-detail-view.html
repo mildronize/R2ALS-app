@@ -1,6 +1,7 @@
 <link rel="import" href="../../components/paper-shadow/paper-shadow.html">
 <link rel="import" href="../../components/paper-button/paper-button.html">
 
+
 <polymer-element name="full-detail-view" attributes="data refresh" >
   <template>
     <style>
@@ -31,7 +32,7 @@
     </style>
     </style>
     <link rel="stylesheet" href="../../css/main.css" shim-shadowdom>
-    <link rel="stylesheet" href="../../external_components/joint.css" shim-shadowdom>
+    <link rel="stylesheet" href="../../components/joint/dist/joint.min.css" shim-shadowdom>
 <!--
     <section>
       <paper-shadow>
@@ -51,7 +52,7 @@
       
     
   </template>
-  <script src="../../external_components/joint.min.js"></script>
+  <script src="../../components/joint/dist/joint.min.js"></script>
   <script src="full-detail-view.js"></script>
   <script>
     
@@ -108,9 +109,9 @@
         }
         this.getSolution();
       },
-      refreshChanged: function(){
-        this.getSolution();
-      },
+//      refreshChanged: function(){
+//        this.getSolution();
+//      },
       getSolution: function(){
         console.log(this.graph);
         if(this.graph != null){
