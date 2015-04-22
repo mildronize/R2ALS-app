@@ -9,12 +9,11 @@
 <!--import Core Icons-->
 <link rel="import" href="../components/core-icons/social-icons.html">
 
-<polymer-element name="main-layout" attributes="selected" noscript>
+<polymer-element name="main-layout" attributes="selected mode">
 
   <template>
-
     <link rel="stylesheet" href="main-layout.css" shim-shadowdom>
-    <core-scaffold>
+    <core-scaffold responsiveWidth="{{responsiveWidth}}">
       <core-header-panel navigation flex mode="seamed">
         <core-toolbar>
           <span>R2ALS</span>
@@ -42,5 +41,17 @@
   </core-scaffold>
 
 </template>
+  <script>
+  Polymer({
+    domReady: function(){
+      console.log("wideMode: " + this.mode);
+      if(this.mode == "wide"){
+        this.responsiveWidth = "1400px";
+        console.log("wideMode: " + this.mode);
+      }
+    }
+  });
+  
+  </script>
   
 </polymer-element>

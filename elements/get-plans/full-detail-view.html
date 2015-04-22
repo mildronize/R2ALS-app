@@ -61,7 +61,7 @@
         this.solution_id = 0;
         this.display_solution_id = 1;
         this.solutions_length = 1;
-//        this.isFirstTime = true;
+        this.showLinkStatus = {};
         this.hasLoadProblem = false;
       },
       created: function(){
@@ -94,6 +94,51 @@
             }
 
         });
+        var graph = this.graph;
+        var data = this.data;
+        var showLinkStatus = this.showLinkStatus;
+        
+        this.paper.on('cell:pointerdown', 
+          function(cellView, evt, x, y) { 
+              console.log('cell view ' + cellView.model.id + ' was clicked'); 
+              console.log(cellView.model.attributes.attrs);
+              var id = cellView.model.id;
+                if(graph != null){
+                  if(!(id in showLinkStatus)){
+                    showLinkStatus[id] = {status: false, model: {} };
+                  }
+                  if(showLinkStatus[id]['status'] == false){
+                    // backup old style
+                    showLinkStatus[id]['model']['rect'] = cellView.model.attributes.attrs.rect;
+                    showLinkStatus[id]['model']['text'] = cellView.model.attributes.attrs.text;
+                    cellView.model.attr({rect: { fill: '#4E342E' }});
+                    var exportJointJS = new ExportJointJS(data);
+                    resultTarget = findNestedRelatedLinkTarget([], 
+                                                               data.links, 
+                                                               findRelatedLinkTarget(data.links, id),
+                                                               id);
+                    resultSource = findNestedRelatedLinkSource([], 
+                                                               data.links, 
+                                                               findRelatedLinkSource(data.links, id),
+                                                               id);
+                    
+                    exportJointJS.loadLink(resultTarget);
+                    exportJointJS.loadLink(resultSource);
+                    graph.addCells(exportJointJS.getCells());
+                  }else{
+                    var allElements = graph.getElements ();
+                    for(var i = 0;i < allElements.length;i++ ) {
+                       graph.removeLinks(allElements[i]);
+                    }
+                    //Retore old color
+                    cellView.model.attr({rect: showLinkStatus[id]['model']['rect'], text: showLinkStatus[id]['model']['text']});
+                    showLinkStatus[id]['model'] = {};
+                  }
+                  showLinkStatus[id]['status'] = !showLinkStatus[id]['status'];
+
+                }
+          }
+        );
         this.paper.scale(0.7, 0.7);
         this.isDomReady = true;
         if(this.hasLoadProblem){
@@ -115,11 +160,15 @@
       getSolution: function(){
         console.log(this.graph);
         if(this.graph != null){
-          this.graph.clear();    
+//          this.graph.clear();    
+          this.showLinkStatus = {};
         // this.graph.fromJSON(this.data[0]);
           
           exportJointJS = new ExportJointJS(this.data);
-          this.graph.addCells(exportJointJS.getCells());
+          exportJointJS.loadSubject();
+//          exportJointJS.loadLinkAll();
+          this.graph.resetCells(exportJointJS.getCells());
+          
         }
       },
 //      getNextSolution: function(){

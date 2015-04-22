@@ -24,7 +24,7 @@
 <link rel="import" href="../pages/subpages/get-plans-compact-subpage.html">
 <link rel="import" href="../pages/subpages/get-plans-json-subpage.html">
 -->
-<polymer-element name="get-plans-page" attributes="pathArg1 queryParam1">
+<polymer-element name="get-plans-page" attributes="pathArg1 pathArg2">
   <template>
     <style>
 
@@ -70,7 +70,7 @@
       }
     </style>
     <link rel="stylesheet" href="../css/main.css" shim-shadowdom>
-    <main-layout selected="get-plans">
+    <main-layout selected="get-plans" mode="wide">
       <div class="title">Get Plans</div>
       <div class="header">
           <div class="bottom fit" horizontal layout>
@@ -89,10 +89,11 @@
               <paper-shadow>
                 <div horizontal center-justified layout hidden?="{{!loading_layout}}">
                   <div vertical layout >
-                    <h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3>
+                    <div horizontal center-justified layout><h3 style="margin: 30px 0px 5px 0px; padding: 0px;">Do you like this plan? ( {{display_solution_id}} / {{solution_length}} )</h3></div>
                         <p>
                           <paper-button raised on-tap="{{getPreviousSolution}}"><< Previous </paper-button>     
                           <paper-button raised on-tap="{{requestPlans}}">Run Again</paper-button>
+                          <paper-button raised on-tap="{{showGuide}}"> Guide </paper-button>
                           <paper-button raised class="colored" on-tap="{{getNextSolution}}">Next >></paper-button></p>
                   </div>
                 </div>
@@ -159,7 +160,7 @@
 <!--      <app-route path="*" import="../pages/subpages/get-plans-{{pathArg1}}-subpage.html"></app-route>-->
 
       <core-ajax id="request"
-        url="http://127.0.0.1:6543/apis/processor" 
+        url="{{server_host}}/apis/processor" 
         method='POST' 
         handleAs="json"
         on-core-response="{{handleResponse}}"
@@ -185,6 +186,13 @@
       </r2als-paper-action-dialog>
       <!--  message from server dialog     -->  
     
+      <r2als-paper-action-dialog heading="Guide" backdrop layered="false" id="guideDialog">
+        <h3>Link type</h3>
+        <img src="../imgs/guide.jpg"/>
+        <h3>Rectangle symbol</h3>
+        <img src="../imgs/symbol.jpg"/>
+        <paper-button dismissive autofocus class="colored">Close</paper-button>
+      </r2als-paper-action-dialog>
     </main-layout>
   </template>
 

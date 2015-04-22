@@ -1,3 +1,66 @@
+//function findNotIDItself(link, id){
+//  if(link.target == link.source){
+//    console.error("link.target must not equal with link.source");  
+//    return "";
+//  }
+//  if (link.target == id)
+//    return link.source;
+//  if (link.source == id)
+//    return link.target;
+//  
+//  console.error("Not found id in link obj");  
+//  return "";
+//}
+
+function findNestedRelatedLinkTarget(result, links, relatedLink, id){
+  if (relatedLink.length == 0 ){
+    return [];
+  }else{
+    for(var i = 0;i < relatedLink.length;i++ ){
+      result.push(relatedLink[i]);
+      subRelatedLink = findRelatedLinkTarget(links, relatedLink[i].source);
+      findNestedRelatedLinkTarget(result ,links, subRelatedLink, id);
+      }
+    }
+    
+  return result;
+}
+
+function findNestedRelatedLinkSource(result, links, relatedLink, id){
+  if (relatedLink.length == 0 ){
+    return [];
+  }else{
+    for(var i = 0;i < relatedLink.length;i++ ){
+      result.push(relatedLink[i]);
+      subRelatedLink = findRelatedLinkSource(links, relatedLink[i].target);
+      findNestedRelatedLinkSource(result ,links, subRelatedLink, id);
+      }
+    }
+    
+  return result;
+}
+
+
+function findRelatedLinkTarget(links, id){
+  lists = []
+  for(var i = 0; i < links.length;i++){
+      if(links[i].target == id){
+         lists.push(links[i])
+      }
+  }
+  return lists;
+}
+function findRelatedLinkSource(links, id){
+  lists = []
+  for(var i = 0; i < links.length;i++){
+      if(links[i].source == id){
+         lists.push(links[i])
+      }
+  }
+  return lists;
+}
+
+
 function ExportJointJS (data) {
 	this.data = data;
     this.width = 100;
@@ -13,6 +76,8 @@ function ExportJointJS (data) {
 	
 	this.last_year = data.last_year;
 	this.last_semester = data.last_semester;
+  
+    this.cells = [];
 
 	this.initialZeroList = function(last_semester_id_plan){
 		lists = [];
@@ -113,6 +178,7 @@ function ExportJointJS (data) {
 		}
 
 		return new joint.shapes.basic.Rect({
+            
             "id": subjec_id,
             "type": "basic.Rect",
             "attrs": { "text": {
@@ -123,7 +189,8 @@ function ExportJointJS (data) {
                          "fill": rect_fill,
                          "stroke": "white",
                          "rx": 5,
-                         "ry": 5 } },
+                         "ry": 5 },
+                     },
             "position":{"x": x,"y": y},
             "size":{"width": this.width,"height":this.height},
             "angle": 0,
@@ -150,6 +217,9 @@ function ExportJointJS (data) {
         if(obj.type == "passed_prerequisite"){
           template.attrs['.connection'] = {};
           template.attrs['.connection']['stroke-width'] = 3;
+          template.attrs['.connection']['stroke'] = '#640000';
+          template.attrs['.marker-source']['stroke'] = '#640000';
+          template.attrs['.marker-source']['fill'] = '#640000';
         }
         if(obj.type == "corequisite"){
           template.attrs['.connection'] = {};
@@ -162,13 +232,11 @@ function ExportJointJS (data) {
 //        console.log(template);
         return template
 	}
-	
-	this.getCells = function(){
-        lists = [];
-		//  Add Semester Header item
+	this.loadSubject = function(){
+      //  Add Semester Header item
 		for(var i = 0; i < this.data.semesters.length;i++){
 			var semester = this.data.semesters[i];
-			lists.push(this.createSemesterHeader(i, semester.year, 
+			this.cells.push(this.createSemesterHeader(i, semester.year, 
 												 semester.semester, 
 												 this.data.total_credits[i]));
 		}
@@ -177,15 +245,25 @@ function ExportJointJS (data) {
 			var subjects = this.data.semesters[i].subjects;
 			for(var j=0;j < subjects.length; j++){
 //				console.log(subjects[j]);
-				lists.push(this.createSubjectRect(subjects[j]));
+				this.cells.push(this.createSubjectRect(subjects[j]));
 //				console.log(this.createSubjectRect(subjects[j]));
 			}
 		}
-		// Link item
+    },
+    this.loadLinkAll = function(){
+      // Link item
 		for(var i = 0; i < this.data.links.length;i++){
-			lists.push(this.createLink(this.data.links[i]));
+			this.cells.push(this.createLink(this.data.links[i]));
 		}
-		return lists;
+    },
+    this.loadLink = function(links){
+      // Link item
+		for(var i = 0; i < links.length;i++){
+			this.cells.push(this.createLink(links[i]));
+		}
+    },
+	this.getCells = function(){
+		return this.cells;
     }
 
 }

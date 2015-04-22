@@ -1,0 +1,68 @@
+<style>
+.box-stack-list{
+/*  text-align:center;*/
+  position: relative; 
+/*  height: 168px;*/
+}
+.box-stack-list .box{
+  width:100px;
+  display:inline-block;
+  margin:2px;
+
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5) inset, 0 1px 1px #DDD;
+  border-radius:2px;
+
+  color:#666;
+  vertical-align: top;
+/*  line-height: 230px;*/
+  font-size: 12px;
+}
+
+.green{
+  background:radial-gradient(#77d19e,#46c17b);
+  height:30px;
+}
+.blue{
+  background:radial-gradient(#8dd2d9 , #58c0c7);
+  height:65px;
+}
+.orange{
+  background:radial-gradient(#FFCC80 , #FFA726); /* color in, color out */
+  height:50px;
+}
+
+</style>
+<script src="../../components/jquery/dist/jquery.min.js"></script>
+<script src="../../components/jquery.transit/jquery.transit.js"></script>
+<script src="box-stack-list.js"></script>
+
+<body>
+  <div class="box-stack-list">
+    <div class="box green" list-id="0">A</div>
+    <div class="box blue" list-id="0">B</div>
+    <div class="box green" list-id="1">C</div>
+    <div class="box blue" list-id="1">D</div>
+    <div class="box orange" list-id="2">E</div>
+    <div class="box blue" list-id="2">F</div>
+    <div class="box orange" list-id="2">G</div>
+    <div class="box orange" list-id="4">E</div>
+    <div class="box blue" list-id="2">F</div>
+    <div class="box orange" list-id="3">G</div>
+    <div class="box green" list-id="2">A</div>
+    <div class="box blue" list-id="4">B</div>
+    <div class="box green" list-id="1">A</div>
+    <div class="box blue" list-id="0">B</div>
+  </div>
+</body>
+<script>
+  console.log(window.parent.boxs);
+  
+    $(document).ready(function(){
+        var bsl = new BoxStackList($(".box-stack-list"));
+        $(".box-stack-list").delegate('.box', 'click', function () {
+//            $(this).hide();
+            bsl.moveBox($(this));
+        });
+    });
+
+</script>
