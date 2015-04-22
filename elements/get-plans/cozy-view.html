@@ -226,15 +226,15 @@
           console.log("test");
           $(this.$["box-stack-list"]).delegate('.box', 'click', function () {
 
-            polymerObj.$["detailDialog"].toggle();
-            subjectObj = polymerObj.prepareDialog($(this));
-            if(subjectObj.hasPrerequisite)
-              polymerObj.prepareGraph(subjectObj);
-            else{
-              $(polymerObj.$['prerequisiteSection']).hide();
-              $(polymerObj.$['graph']).html("");
-            }
-            console.log("clicked");
+//            polymerObj.$["detailDialog"].toggle();
+//            subjectObj = polymerObj.prepareDialog($(this));
+//            if(subjectObj.hasPrerequisite)
+//              polymerObj.prepareGraph(subjectObj);
+//            else{
+//              $(polymerObj.$['prerequisiteSection']).hide();
+//              $(polymerObj.$['graph']).html("");
+//            }
+//            console.log("clicked");
           });
           console.log("first time run");
           this.isFirstTime = false;

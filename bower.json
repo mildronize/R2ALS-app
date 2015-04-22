@@ -1,6 +1,6 @@
 {
   "name": "r2als-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     "Thada Wangthammang <mildronize@gmail.com>"
   ],
@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^0.5.0",
+    "polymer": "Polymer/polymer#^0.5.3",
 
     "core-ajax": "Polymer/core-ajax#^0.5.3",
     "font-roboto": "Polymer/font-roboto#^0.5.3",
