@@ -132,7 +132,8 @@
         
         $(window).resize(function() {
 //            console.log($(window).height());
-            $(polymerObj.$['box-container']).css("height", $(window).height() - 275);
+            $(polymerObj.$['box-container']).css("height", $(window).height());
+//          $(polymerObj.$['box-container']).css("height", $(window).height() - 275);
         });
 
         $(window).trigger('resize');
@@ -222,10 +223,9 @@
           this.initialBoxs("box-stack-list");
 
           bsl = new BoxStackList(this, "box-stack-list");
-          
+          console.log("test");
           $(this.$["box-stack-list"]).delegate('.box', 'click', function () {
-  //            $(this).hide();
-//              bsl.moveBox($(this));
+
             polymerObj.$["detailDialog"].toggle();
             subjectObj = polymerObj.prepareDialog($(this));
             if(subjectObj.hasPrerequisite)

@@ -157,7 +157,8 @@ var searchSuggestions = function (data, wordSearch, key, url, root){
       },
       toInput: function(event,detail,sender){
 //        this.sValue = sender.innerHTML.trim();
-        this.sValue = sender.innerHTML.trim()
+        this.sValue = sender.innerHTML.trim();
+        console.log(this.sValue);
         //this.suggestions = null;
         this.open = false;
         this.selectedObject = {

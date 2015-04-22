@@ -4,10 +4,15 @@
 //Name: Thada Wangthammang
 //Github: https://github.com/mildronize/R2ALS-app
 //E-mail: mildronize@gmail.com
-//
-//  "study-result-page" Section
+
+// Server config
+var host = "http://127.0.0.1"
+var port = 6543;
+
+// Initial var
 var models;
 var prefix_link = "#/";
+var server_host = host + ":" + port;
 
 function initialModels(){
 	models = {};
@@ -15,8 +20,9 @@ function initialModels(){
 	//  models type
 	//  - array-of-semester
 	//  - array-of-subject
+    // currently support only array-of-semester
 	models.type = "array-of-semester";
-	models.is_testing = true;
+	models.is_testing = false;
 	models.semesters = [];
 }
 
@@ -90,11 +96,11 @@ function capitaliseFirstLetter(string){
 //      }
 //    }
 
-
   });
 
   Polymer('home-page', {
     created: function() {
+      this.server_host = server_host;
       var tmp = loadLocalStorage("models");
       if(tmp != null) models = tmp;
       console.log(models);
@@ -113,8 +119,9 @@ function capitaliseFirstLetter(string){
 
   Polymer('profile-page', {
     created: function() {
+        this.server_host = server_host;
 		var tmp = loadLocalStorage("models");
-   if(tmp != null) models = tmp;
+        if(tmp != null) models = tmp;
 		this.subject_group = models.member.subject_group;
 		this.branch = models.member.branch;
     },
@@ -137,11 +144,14 @@ function capitaliseFirstLetter(string){
     // initialize the element's model
 
     created: function() {
+      this.server_host = server_host;
       var tmp = loadLocalStorage("models");
       if(tmp != null) models = tmp;
+      this.subject_group = models.member.subject_group;
       this.hideMessage = false;
       this.subjectInSemesters = models.semesters;
       this.changeData();
+      
     },
     ready: function () {
       console.log("study-result-page ready " + n);
@@ -248,6 +258,7 @@ function capitaliseFirstLetter(string){
 
   Polymer('get-plans-page', {
     created: function() {
+      this.server_host = server_host;
       validateData();
       this.defaultView = "compact";
 //      this.tabSelected = "cozy-view";
@@ -300,6 +311,12 @@ function capitaliseFirstLetter(string){
     },
     attached: function () {
       console.log(this.pathArg1);
+      console.log(this.pathArg2);
+//      if(this.pathArg2 != ""){
+//        this.solution_id = parseInt(this.pathArg2) - 1;
+//        this.display_solution_id = parseInt(this.pathArg2);
+//        this.updateSolution();
+//      }
       if(this.pathArg1 in this.getPlansView) 
         this.activeView(this.pathArg1);
       else
@@ -340,7 +357,8 @@ function capitaliseFirstLetter(string){
         if( this.response.type != "success"){
           this.messageHeading = capitaliseFirstLetter(this.response.type);
           this.messageBody = [];
-          this.messageBody[0] = this.response.message;
+          for(var i =0;i< this.response.message.length;i++)
+            this.messageBody[i] = this.response.message[i];
           this.$.messageDialog.toggle();
         }
         else{
@@ -373,6 +391,9 @@ function capitaliseFirstLetter(string){
     updateSolution: function(){
         this.current_plan = this.response.data.plans[this.solution_id];
         console.log("updateSolution");
+    },
+    showGuide: function(){
+      this.$.guideDialog.toggle();
     },
     getNextSolution: function(){
         if(this.solution_id < this.solution_length-1){
