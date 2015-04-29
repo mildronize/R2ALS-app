@@ -49,12 +49,14 @@
         overflow: hidden;
       }
   </style>
-  <core-item class="subject-item" on-tap={{editItem}}>
-    <div class="grade grade-circle grade-space">{{grade}}</div>
-    <div flex>
-      <div class="name">{{name}}</div>
-      <div class="tags">{{tags}}</div>
-    </div>
+  <core-item class="subject-item" >
+    <core-item flex on-tap={{editItem}}>
+      <div class="grade grade-circle grade-space">{{grade}}</div>
+      <div flex>
+        <div class="name" >{{name}}</div>
+        <div class="tags">{{tags}}</div>
+      </div>
+    </core-item>
     <core-icon-button icon="delete" on-tap={{destroyItem}}></core-icon-button>
   </core-item>
 
@@ -68,16 +70,18 @@
           this.fire('destroy-item', this.item);
         },
         editItem: function (){
-          this.fire('edit-item', this.item);
+          this.fire('edit-item', this.item);  
         },
 //        editSubject: function (){
+//         
 //          this.tempSubjectData = {};
 //          this.tempSubjectData.gradeOption = this.gradeOption;
 //          this.tempSubjectData.name = this.name;
 ////          this.tempSubjectData.tags = this.tags;
 //          this.tempSubjectData.grade = this.grade;
 //          this.tempSubjectData.id = this.id;
-//          this.$.EditSubjectItem.toggle();
+////          this.$.EditSubjectItem.toggle();
+////           console.log( this.tempSubjectData);
 //        }
     });
   </script>

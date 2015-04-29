@@ -46,7 +46,7 @@ function initialLocalStorage(){
 function updateLocalStorage(name, data){
 	if (isBrowserSupportStorage()) {
 		localStorage.setItem(name , JSON.stringify(data));
-		console.log(JSON.parse(localStorage.getItem(name)));
+//		console.log(JSON.parse(localStorage.getItem(name)));
 	}
 }
 
@@ -144,9 +144,11 @@ function capitaliseFirstLetter(string){
     // initialize the element's model
 
     created: function() {
+    
       this.server_host = server_host;
       var tmp = loadLocalStorage("models");
       if(tmp != null) models = tmp;
+      this.dialogMode = "add";
       this.subject_group = models.member.subject_group;
       this.hideMessage = false;
       this.subjectInSemesters = models.semesters;
@@ -184,7 +186,7 @@ function capitaliseFirstLetter(string){
 
         for(var i=0 ;i< this.subjectInSemesters.length; i++){
           var subjectInSemester = this.subjectInSemesters[i];
-          console.log(this.tempSubjectData);
+//          console.log(this.tempSubjectData);
           if(subjectInSemester.year == this.tempSubjectData.year & subjectInSemester.semester == this.tempSubjectData.semester){
             this.subjectInSemesters[i].subjects.push(this.tempSubjectData);
             found = true;
@@ -208,7 +210,13 @@ function capitaliseFirstLetter(string){
     },
     buttonAdd: function (){
       console.log("clicked");
-      this.addSubject();
+      if(this.dialogMode =="add")
+        this.addSubject();
+      else if(this.dialogMode =="edit"){
+        this.editSubject();
+        this.dialogMode = "add";
+        this.toggleDialog();
+        }
       this.clearData();
       this.changeData();
     },
@@ -244,12 +252,57 @@ function capitaliseFirstLetter(string){
         this.deleteSemester(detail.subjectInSemester);
       }
       this.changeData();
+//      console.log("aaa");
     },
     editItemAction:  function(e, detail) {
 //      console.log("555");
-      console.log(detail);
-//      this.tempSubjectData = detail.subject;
-//      this.$.addSubjectItem.toggle();
+      this.dialogMode = "edit";
+//      console.log("bbb");
+//      console.log("cache");
+
+      this.tempSubjectData = detail.subject;
+      this.old_semester = detail.subject.semester;
+      this.old_year = detail.subject.year;
+      this.toggleDialog();
+    },
+    editSubject: function(){
+//      console.log(this.tempSubjectData);
+      if(this.tempSubjectData.year == this.old_year &  
+         this.tempSubjectData.semester == this.old_semester){
+        var semesterChanged = false;
+      }else 
+        var semesterChanged = true;
+      console.log("AHello: "+semesterChanged);
+      console.log(this.tempSubjectData);
+      console.log(this.old_year + " / " + this.old_semester);
+      if(this.subjectInSemesters.length > 0){
+        
+        for(var i=0 ;i< this.subjectInSemesters.length; i++){
+          var subjectInSemester = this.subjectInSemesters[i];
+//          console.log(this.tempSubjectData);
+          if(subjectInSemester.year == this.old_year & subjectInSemester.semester == this.old_semester){
+//            this.subjectInSemesters[i].subjects.push(this.tempSubjectData);
+//            found = true;
+            for(var j = 0; j < this.subjectInSemesters[i].subjects.length;j++){
+               if (this.subjectInSemesters[i].subjects[j].id == this.tempSubjectData.id){
+                 console.log("Hello: "+semesterChanged);
+                  if(semesterChanged == false)
+                    this.subjectInSemesters[i].subjects[j] = this.tempSubjectData;
+                  else {
+                    this.subjectInSemesters[i].subjects.splice(j, 1);
+                    if ( this.subjectInSemesters[i].subjects.length == 0 ){
+                      this.subjectInSemesters.splice(i, 1);
+                    }
+                    this.addSubject();
+                    this.changeData();
+                  }
+                  break;
+               }
+            }
+            break;
+          }
+        }
+      }
     }
 
   });

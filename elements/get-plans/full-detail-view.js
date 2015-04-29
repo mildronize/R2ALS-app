@@ -168,7 +168,10 @@ function ExportJointJS (data) {
 											 subjectObj.semester,
 											 this.last_year,
 											 this.last_semester)
-		if(cmp_semester <= 0)
+        //console.log(subjectObj.isFail)
+        if (subjectObj.isFail == true)
+          rect_fill = "orange";
+		else if(cmp_semester <= 0)
 			rect_fill = "#666666";
 		else{
 			if( subjectObj.hasPrerequisite)

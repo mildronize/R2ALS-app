@@ -19,7 +19,7 @@
     <section>
       <h4>Year {{subjectInSemester.year}} Semester {{subjectInSemester.semester}}</h4>
         <div flex>
-          <paper-shadow on-destroy-item={{destroyItemAction}} on-edit-item="{{EditItemAction}}">
+          <paper-shadow on-destroy-item={{destroyItemAction}} >
             <template repeat="{{subject in subjectInSemester.subjects}}" > 
               <r2als-subject name="{{subject.name}}" grade="{{subject.grade}}" item="{{}}" gradeOption="{{subject.gradeOption}}" subject_id="{{subject.id}}"></r2als-subject> 
             </template> 
@@ -50,10 +50,10 @@
           }
         },
                 
-        EditItemAction: function(e, detail) {
-//          console.log(detail);
-          this.fire('edit-item', detail);
-        }
+//        EditItemAction: function(e, detail) {
+////          console.log(detail);
+//          this.fire('edit-item', detail);
+//        }
         
       });
   </script>
