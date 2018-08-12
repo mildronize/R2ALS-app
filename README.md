@@ -1,14 +1,27 @@
 # R2ALS-app
 An application of R2ALS project
 
+## This project is deprecated
+> **No longer maintenance**
+
+This project uses Polymer 0.53 as a core application, which is no longer supported by Google
+This project can't run on Chrome 45 due to lack of web technology
+
+The last capture
+![](preview.png)
+
+## Changelog
+- Move from `bower` to `yarn`
+- Replace many packages with the other place repositories (using [googlearchive](https://github.com/googlearchive))
+
 # Briefly Installation
 
 - Prerequistie
 nodejs
 
 ```
-npm install -g bower
-bower install
+npm install -g yarn 
+yarn install
 ```
 # Full Installation Guide
 
@@ -26,9 +39,9 @@ If the result of the command shows that “command not found: node”. Using bel
 ```
 ln -s /usr/bin/nodejs /usr/bin/node
 ```
-5.	Install bower from npm command
+5.	Install yarn from npm command
 ```
-sudo npm install –g bower
+sudo npm install –g yarn 
 ```
 6.	Access the target directory
 ```
@@ -45,7 +58,7 @@ cd R2ALS-app
 ```
 9.	Setup prerequisite packages for web using this command.
 ```
-bower install
+yarn install
 ```
 10.	Run the server.
 ```
